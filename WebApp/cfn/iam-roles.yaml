@@ -1,0 +1,141 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for IAM roles needed for CI/CD pipeline (2025)'
+
+Resources:
+  CodeBuildServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codebuild.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/AmazonS3ReadOnlyAccess'
+      Path: /service-role/
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodeBuildServicePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: CodeBuildServicePolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 'logs:CreateLogGroup'
+              - 'logs:CreateLogStream'
+              - 'logs:PutLogEvents'
+            Resource:
+              - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*'
+          - Effect: Allow
+            Action:
+              - 's3:PutObject'
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+              - 's3:GetBucketAcl'
+              - 's3:GetBucketLocation'
+            Resource:
+              - !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+              - !Sub 'arn:aws:s3:::${ArtifactBucket}'
+      Roles:
+        - !Ref CodeBuildServiceRole
+
+  CodeDeployServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codedeploy.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSCodeDeployRole'
+      Path: /service-role/
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodePipelineServiceRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: codepipeline.amazonaws.com
+            Action: 'sts:AssumeRole'
+      Path: /service-role/
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodePipelineServicePolicy:
+    Type: AWS::IAM::Policy
+    Properties:
+      PolicyName: CodePipelineServicePolicy
+      PolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Action:
+              - 's3:GetObject'
+              - 's3:GetObjectVersion'
+              - 's3:GetBucketVersioning'
+              - 's3:PutObject'
+            Resource:
+              - !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
+              - !Sub 'arn:aws:s3:::${ArtifactBucket}'
+          - Effect: Allow
+            Action:
+              - 'codebuild:BatchGetBuilds'
+              - 'codebuild:StartBuild'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'codedeploy:CreateDeployment'
+              - 'codedeploy:GetDeployment'
+              - 'codedeploy:GetDeploymentConfig'
+              - 'codedeploy:GetApplicationRevision'
+              - 'codedeploy:RegisterApplicationRevision'
+            Resource: '*'
+      Roles:
+        - !Ref CodePipelineServiceRole
+
+Parameters:
+  ArtifactBucket:
+    Type: String
+    Description: S3 bucket for storing artifacts
+
+Outputs:
+  CodeBuildServiceRoleArn:
+    Description: ARN of the CodeBuild service role
+    Value: !GetAtt CodeBuildServiceRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeBuildServiceRoleArn
+
+  CodeDeployServiceRoleArn:
+    Description: ARN of the CodeDeploy service role
+    Value: !GetAtt CodeDeployServiceRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeDeployServiceRoleArn
+
+  CodePipelineServiceRoleArn:
+    Description: ARN of the CodePipeline service role
+    Value: !GetAtt CodePipelineServiceRole.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-CodePipelineServiceRoleArn

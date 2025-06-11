@@ -1,0 +1,81 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for CodeBuild project (2025)'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: webapp-build
+    Description: Name of the CodeBuild project
+  
+  RepositoryName:
+    Type: String
+    Default: cicd-demo
+    Description: Name of the GitHub repository
+  
+  RepositoryOwner:
+    Type: String
+    Default: elngovind
+    Description: GitHub username or organization
+  
+  BranchName:
+    Type: String
+    Default: main
+    Description: Branch to build from
+  
+  ArtifactBucketName:
+    Type: String
+    Description: S3 bucket for storing build artifacts
+  
+  CodeBuildServiceRoleArn:
+    Type: String
+    Description: ARN of the IAM role for CodeBuild
+
+Resources:
+  CodeBuildProject:
+    Type: AWS::CodeBuild::Project
+    Properties:
+      Name: !Ref ProjectName
+      Description: Build project for WebApp
+      ServiceRole: !Ref CodeBuildServiceRoleArn
+      Artifacts:
+        Type: S3
+        Location: !Ref ArtifactBucketName
+        Name: BuildOutput
+        NamespaceType: BUILD_ID
+        Packaging: ZIP
+      Environment:
+        Type: LINUX_CONTAINER
+        ComputeType: BUILD_GENERAL1_SMALL
+        Image: aws/codebuild/amazonlinux2-x86_64-standard:4.0
+        PrivilegedMode: false
+      Source:
+        Type: GITHUB
+        Location: !Sub https://github.com/${RepositoryOwner}/${RepositoryName}.git
+        BuildSpec: WebApp/buildspec.yml
+        GitCloneDepth: 1
+        ReportBuildStatus: true
+        Auth:
+          Type: OAUTH
+      SourceVersion: !Ref BranchName
+      TimeoutInMinutes: 15
+      LogsConfig:
+        CloudWatchLogs:
+          Status: ENABLED
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+Outputs:
+  CodeBuildProjectName:
+    Description: Name of the CodeBuild project
+    Value: !Ref CodeBuildProject
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeBuildProjectName
+  
+  CodeBuildProjectArn:
+    Description: ARN of the CodeBuild project
+    Value: !GetAtt CodeBuildProject.Arn
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeBuildProjectArn

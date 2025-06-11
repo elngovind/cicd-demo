@@ -1,0 +1,125 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Master CloudFormation template for CI/CD pipeline (2025)'
+
+Parameters:
+  ProjectName:
+    Type: String
+    Default: webapp
+    Description: Base name for all resources
+  
+  RepositoryName:
+    Type: String
+    Default: cicd-demo
+    Description: Name of the GitHub repository
+  
+  RepositoryOwner:
+    Type: String
+    Default: elngovind
+    Description: GitHub username or organization
+  
+  BranchName:
+    Type: String
+    Default: main
+    Description: Branch to build from
+  
+  AutoScalingGroupName:
+    Type: String
+    Description: Name of the Auto Scaling group to deploy to
+
+Resources:
+  S3BucketStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/s3-bucket.yaml
+      Parameters:
+        BucketName: !Sub ${ProjectName}-artifacts-${AWS::AccountId}-${AWS::Region}
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  IAMRolesStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: S3BucketStack
+    Properties:
+      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/iam-roles.yaml
+      Parameters:
+        ArtifactBucket: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodeBuildStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: IAMRolesStack
+    Properties:
+      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codebuild.yaml
+      Parameters:
+        ProjectName: !Sub ${ProjectName}-build
+        RepositoryName: !Ref RepositoryName
+        RepositoryOwner: !Ref RepositoryOwner
+        BranchName: !Ref BranchName
+        ArtifactBucketName: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
+        CodeBuildServiceRoleArn: !GetAtt IAMRolesStack.Outputs.CodeBuildServiceRoleArn
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodeDeployStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: IAMRolesStack
+    Properties:
+      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codedeploy.yaml
+      Parameters:
+        ApplicationName: !Sub ${ProjectName}-deploy
+        DeploymentGroupName: !Sub ${ProjectName}-deploy-group
+        ServiceRoleArn: !GetAtt IAMRolesStack.Outputs.CodeDeployServiceRoleArn
+        AutoScalingGroupName: !Ref AutoScalingGroupName
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+  CodePipelineStack:
+    Type: AWS::CloudFormation::Stack
+    DependsOn: [CodeBuildStack, CodeDeployStack]
+    Properties:
+      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codepipeline.yaml
+      Parameters:
+        PipelineName: !Sub ${ProjectName}-pipeline
+        RepositoryName: !Ref RepositoryName
+        RepositoryOwner: !Ref RepositoryOwner
+        BranchName: !Ref BranchName
+        ArtifactBucketName: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
+        CodePipelineServiceRoleArn: !GetAtt IAMRolesStack.Outputs.CodePipelineServiceRoleArn
+        CodeBuildProjectName: !GetAtt CodeBuildStack.Outputs.CodeBuildProjectName
+        CodeDeployApplicationName: !GetAtt CodeDeployStack.Outputs.CodeDeployApplicationName
+        CodeDeployDeploymentGroupName: !GetAtt CodeDeployStack.Outputs.DeploymentGroupName
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+Outputs:
+  ArtifactBucketName:
+    Description: Name of the S3 bucket for artifacts
+    Value: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
+  
+  CodeBuildProjectName:
+    Description: Name of the CodeBuild project
+    Value: !GetAtt CodeBuildStack.Outputs.CodeBuildProjectName
+  
+  CodeDeployApplicationName:
+    Description: Name of the CodeDeploy application
+    Value: !GetAtt CodeDeployStack.Outputs.CodeDeployApplicationName
+  
+  CodePipelineName:
+    Description: Name of the CodePipeline
+    Value: !GetAtt CodePipelineStack.Outputs.CodePipelineName

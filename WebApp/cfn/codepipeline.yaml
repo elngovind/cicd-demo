@@ -1,0 +1,112 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for CodePipeline (2025)'
+
+Parameters:
+  PipelineName:
+    Type: String
+    Default: webapp-pipeline
+    Description: Name of the CodePipeline
+  
+  RepositoryName:
+    Type: String
+    Default: cicd-demo
+    Description: Name of the GitHub repository
+  
+  RepositoryOwner:
+    Type: String
+    Default: elngovind
+    Description: GitHub username or organization
+  
+  BranchName:
+    Type: String
+    Default: main
+    Description: Branch to build from
+  
+  ArtifactBucketName:
+    Type: String
+    Description: S3 bucket for storing pipeline artifacts
+  
+  CodePipelineServiceRoleArn:
+    Type: String
+    Description: ARN of the IAM role for CodePipeline
+  
+  CodeBuildProjectName:
+    Type: String
+    Description: Name of the CodeBuild project
+  
+  CodeDeployApplicationName:
+    Type: String
+    Description: Name of the CodeDeploy application
+  
+  CodeDeployDeploymentGroupName:
+    Type: String
+    Description: Name of the CodeDeploy deployment group
+
+Resources:
+  CodePipeline:
+    Type: AWS::CodePipeline::Pipeline
+    Properties:
+      Name: !Ref PipelineName
+      RoleArn: !Ref CodePipelineServiceRoleArn
+      ArtifactStore:
+        Type: S3
+        Location: !Ref ArtifactBucketName
+      Stages:
+        - Name: Source
+          Actions:
+            - Name: Source
+              ActionTypeId:
+                Category: Source
+                Owner: ThirdParty
+                Provider: GitHub
+                Version: '1'
+              Configuration:
+                Owner: !Ref RepositoryOwner
+                Repo: !Ref RepositoryName
+                Branch: !Ref BranchName
+                OAuthToken: '{{resolve:secretsmanager:GitHubToken:SecretString:token}}'
+                PollForSourceChanges: false
+              OutputArtifacts:
+                - Name: SourceCode
+        
+        - Name: Build
+          Actions:
+            - Name: BuildAction
+              ActionTypeId:
+                Category: Build
+                Owner: AWS
+                Provider: CodeBuild
+                Version: '1'
+              Configuration:
+                ProjectName: !Ref CodeBuildProjectName
+              InputArtifacts:
+                - Name: SourceCode
+              OutputArtifacts:
+                - Name: BuildOutput
+        
+        - Name: Deploy
+          Actions:
+            - Name: DeployAction
+              ActionTypeId:
+                Category: Deploy
+                Owner: AWS
+                Provider: CodeDeploy
+                Version: '1'
+              Configuration:
+                ApplicationName: !Ref CodeDeployApplicationName
+                DeploymentGroupName: !Ref CodeDeployDeploymentGroupName
+              InputArtifacts:
+                - Name: BuildOutput
+      
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+Outputs:
+  CodePipelineName:
+    Description: Name of the CodePipeline
+    Value: !Ref CodePipeline
+    Export:
+      Name: !Sub ${AWS::StackName}-CodePipelineName

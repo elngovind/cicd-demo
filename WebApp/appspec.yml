@@ -1,0 +1,38 @@
+version: 0.0
+os: linux
+files:
+  - source: /
+    destination: /home/ubuntu/node-website
+    overwrite: true
+permissions:
+  - object: /home/ubuntu/node-website
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+  - object: /home/ubuntu/node-website/scripts
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+    type: directory
+  - object: /home/ubuntu/node-website/scripts/*.sh
+    owner: ubuntu
+    group: ubuntu
+    mode: 755
+    type: file
+hooks:
+  BeforeInstall:
+    - location: scripts/install_dependencies.sh
+      timeout: 300
+      runas: root
+  ApplicationStop:
+    - location: scripts/stop_server.sh
+      timeout: 60
+      runas: root
+  ApplicationStart:
+    - location: scripts/start_server.sh
+      timeout: 60
+      runas: root
+  ValidateService:
+    - location: scripts/validate_service.sh
+      timeout: 60
+      runas: root

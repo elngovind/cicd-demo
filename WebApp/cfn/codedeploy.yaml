@@ -1,0 +1,69 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'CloudFormation template for CodeDeploy application and deployment group (2025)'
+
+Parameters:
+  ApplicationName:
+    Type: String
+    Default: webapp-deploy
+    Description: Name of the CodeDeploy application
+  
+  DeploymentGroupName:
+    Type: String
+    Default: webapp-deploy-group
+    Description: Name of the CodeDeploy deployment group
+  
+  ServiceRoleArn:
+    Type: String
+    Description: ARN of the IAM role for CodeDeploy
+  
+  AutoScalingGroupName:
+    Type: String
+    Description: Name of the Auto Scaling group to deploy to
+
+Resources:
+  CodeDeployApplication:
+    Type: AWS::CodeDeploy::Application
+    Properties:
+      ApplicationName: !Ref ApplicationName
+      ComputePlatform: Server
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+  
+  DeploymentGroup:
+    Type: AWS::CodeDeploy::DeploymentGroup
+    Properties:
+      ApplicationName: !Ref CodeDeployApplication
+      DeploymentGroupName: !Ref DeploymentGroupName
+      DeploymentConfigName: CodeDeployDefault.OneAtATime
+      ServiceRoleArn: !Ref ServiceRoleArn
+      AutoScalingGroups:
+        - !Ref AutoScalingGroupName
+      DeploymentStyle:
+        DeploymentType: IN_PLACE
+        DeploymentOption: WITHOUT_TRAFFIC_CONTROL
+      LoadBalancerInfo: {}
+      AutoRollbackConfiguration:
+        Enabled: true
+        Events:
+          - DEPLOYMENT_FAILURE
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+Outputs:
+  CodeDeployApplicationName:
+    Description: Name of the CodeDeploy application
+    Value: !Ref CodeDeployApplication
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeDeployApplicationName
+  
+  DeploymentGroupName:
+    Description: Name of the CodeDeploy deployment group
+    Value: !Ref DeploymentGroup
+    Export:
+      Name: !Sub ${AWS::StackName}-DeploymentGroupName

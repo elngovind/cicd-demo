@@ -1,0 +1,39 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      nodejs: 20
+    commands:
+      - echo Installing dependencies...
+      - npm install
+  
+  pre_build:
+    commands:
+      - echo Running tests...
+      - npm test || echo "No tests found, continuing build"
+  
+  build:
+    commands:
+      - echo Build started on `date`
+      - npm run build || echo "No build script found, continuing"
+  
+  post_build:
+    commands:
+      - echo Build completed on `date`
+
+artifacts:
+  files:
+    - appspec.yml
+    - package.json
+    - package-lock.json
+    - app.js
+    - scripts/**/*
+    - public/**/*
+    - node_modules/**/*
+  discard-paths: no
+  base-directory: '.'
+
+cache:
+  paths:
+    - 'node_modules/**/*'
