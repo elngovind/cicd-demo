@@ -33,6 +33,8 @@ For detailed instructions, see the [WebApp README](WebApp/README.md).
 
 ### Deploy the CI/CD Pipeline
 
+#### Using AWS CLI
+
 1. Create a GitHub Personal Access Token
 2. Store the token in AWS Secrets Manager as `GitHubToken`
 3. Deploy the master CloudFormation template:
@@ -43,11 +45,15 @@ For detailed instructions, see the [WebApp README](WebApp/README.md).
      --parameters \
        ParameterKey=ProjectName,ParameterValue=webapp \
        ParameterKey=RepositoryName,ParameterValue=cicd-demo \
-       ParameterKey=RepositoryOwner,ParameterValue=your-github-username \
+       ParameterKey=RepositoryOwner,ParameterValue=elngovind \
        ParameterKey=BranchName,ParameterValue=main \
        ParameterKey=AutoScalingGroupName,ParameterValue=your-asg-name \
      --capabilities CAPABILITY_IAM
    ```
+
+#### Using AWS Console
+
+For step-by-step instructions on deploying through the AWS Management Console, see the [Console Deployment Guide](WebApp/CONSOLE_DEPLOYMENT.md).
 
 ### Manual Instance Setup
 
