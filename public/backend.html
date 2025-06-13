@@ -244,31 +244,31 @@
                                     <td>Bhushan</td>
                                     <td>40</td>
                                     <td>Intermediate</td>
-                                    <td>5</td>
+                                    <td>2</td>
                                 </tr>
                                 <tr>
                                     <td>Sumanth Hegde</td>
                                     <td>39</td>
                                     <td>Intermediate</td>
-                                    <td>6</td>
+                                    <td>3</td>
                                 </tr>
                                 <tr>
                                     <td>Varun V R Manjaru</td>
                                     <td>36</td>
                                     <td>Intermediate</td>
-                                    <td>7</td>
+                                    <td>4</td>
                                 </tr>
                                 <tr>
                                     <td>Prakhar Kumar</td>
                                     <td>32</td>
                                     <td>Intermediate</td>
-                                    <td>8</td>
+                                    <td>5</td>
                                 </tr>
                                 <tr>
                                     <td>Abhinay</td>
                                     <td>30</td>
                                     <td>Intermediate</td>
-                                    <td>9</td>
+                                    <td>6</td>
                                 </tr>
                             </tbody>
                         </table>
@@ -280,5 +280,44 @@
 
     <script src="js/main.js"></script>
     <script src="js/interactive.js"></script>
+    <script src="js/student-data.js"></script>
+    <script>
+        // Initialize tabs for backend page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Make sure tabs are initialized
+            if (typeof initTabs === 'function') {
+                initTabs();
+            }
+            
+            // Populate student table from student data if available
+            if (typeof studentData !== 'undefined') {
+                const studentTable = document.querySelector('#students-tab .backend-table tbody');
+                if (studentTable) {
+                    // Clear existing rows
+                    studentTable.innerHTML = '';
+                    
+                    // Add top 10 students
+                    studentData.slice(0, 10).forEach(student => {
+                        const progress = Math.floor(Math.random() * 30) + 70; // Random progress between 70-100%
+                        const status = progress > 85 ? 'active' : (progress > 75 ? 'pending' : 'inactive');
+                        const statusText = status === 'active' ? 'Active' : (status === 'pending' ? 'On Leave' : 'Inactive');
+                        
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${student.name}</td>
+                            <td>${student.job}</td>
+                            <td>${progress}%</td>
+                            <td><span class="status-badge status-${status}">${statusText}</span></td>
+                            <td>
+                                <button class="btn btn-outline">Edit</button>
+                            </td>
+                        `;
+                        
+                        studentTable.appendChild(row);
+                    });
+                }
+            }
+        });
+    </script>
 </body>
 </html>
