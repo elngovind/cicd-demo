@@ -61,8 +61,18 @@ The CI/CD pipeline uses the following AWS services:
 1. Go to AWS Console > Developer Tools > Settings > Connections
 2. Click "Create connection"
 3. Select "GitHub" as the provider
-4. Follow the prompts to connect to your GitHub account
-5. Note the ARN of the created connection
+4. Enter a connection name (e.g., "GitHub-Connection")
+5. Click "Connect to GitHub"
+6. In the new browser window, sign in to GitHub if prompted
+7. Choose whether to grant access to all repositories or select specific repositories
+   - If selecting specific repositories, make sure to include `cicd-demo`
+8. Click "Authorize AWS Connector for GitHub"
+9. You'll be redirected back to AWS Console
+10. Wait for the connection status to show "Available"
+11. Click "Complete connection"
+12. Copy the connection ARN for use in the next step
+
+For more detailed instructions, see [CODESTAR_CONNECTION.md](CODESTAR_CONNECTION.md)
 
 ##### Step 3: Deploy the Master Stack
 1. Go to AWS Console > CloudFormation > Stacks
@@ -111,11 +121,27 @@ cd cfn
 ```
 
 ##### Step 2: Create CodeStar Connection (if not already created)
+```bash
+# Create the connection (status will be PENDING)
+aws codestar-connections create-connection \
+  --provider-type GitHub \
+  --connection-name GitHub-Connection
+```
+
+Then complete the connection:
 1. Go to AWS Console > Developer Tools > Settings > Connections
-2. Click "Create connection"
-3. Select "GitHub" as the provider
-4. Follow the prompts to connect to your GitHub account
-5. Note the ARN of the created connection
+2. Find your connection with status "Pending"
+3. Click on it and select "Update pending connection"
+4. Follow the GitHub authorization steps
+5. Get the connection ARN:
+```bash
+aws codestar-connections list-connections \
+  --provider-type GitHub \
+  --query "Connections[?ConnectionName=='GitHub-Connection'].ConnectionArn" \
+  --output text
+```
+
+For more detailed instructions, see [CODESTAR_CONNECTION.md](CODESTAR_CONNECTION.md)
 
 ##### Step 3: Deploy the Master Stack
 ```bash
