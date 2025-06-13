@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS Event-Based Architecture</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="logo">
+                <i class="fas fa-cloud"></i>
+                <span>AWS Event Architecture</span>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#overview" class="active">Overview</a></li>
+                    <li><a href="#architecture">Architecture</a></li>
+                    <li><a href="#demo">Live Demo</a></li>
+                    <li><a href="#code">Code</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main>
+        <section id="hero">
+            <div class="container">
+                <h1>Event-Driven Architecture on AWS</h1>
+                <p>Build scalable, decoupled systems using AWS event-based services</p>
+                <div class="buttons">
+                    <a href="#demo" class="btn btn-primary">Try Demo</a>
+                    <a href="#architecture" class="btn btn-outline">View Architecture</a>
+                </div>
+            </div>
+        </section>
+
+        <section id="overview">
+            <div class="container">
+                <h2>Overview</h2>
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-plug"></i>
+                        </div>
+                        <h3>Decoupled Systems</h3>
+                        <p>Build loosely coupled microservices that communicate through events</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Scalable</h3>
+                        <p>Scale components independently based on demand</p>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Resilient</h3>
+                        <p>Improve fault tolerance with asynchronous processing</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="architecture">
+            <div class="container">
+                <h2>Architecture</h2>
+                <div class="architecture-diagram">
+                    <img src="architecture.png" alt="Event-Based Architecture Diagram">
+                </div>
+                <div class="architecture-details">
+                    <div class="component">
+                        <h3>API Gateway</h3>
+                        <p>Receives HTTP requests and triggers Lambda functions</p>
+                    </div>
+                    <div class="component">
+                        <h3>Lambda</h3>
+                        <p>Serverless functions that process events and publish to SNS</p>
+                    </div>
+                    <div class="component">
+                        <h3>SNS</h3>
+                        <p>Pub/sub messaging service that fans out events to multiple subscribers</p>
+                    </div>
+                    <div class="component">
+                        <h3>SQS</h3>
+                        <p>Message queuing service that buffers events for processing</p>
+                    </div>
+                    <div class="component">
+                        <h3>DynamoDB</h3>
+                        <p>NoSQL database for storing event data with streams capability</p>
+                    </div>
+                    <div class="component">
+                        <h3>EventBridge</h3>
+                        <p>Event bus that routes events between AWS services and applications</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="demo">
+            <div class="container">
+                <h2>Live Demo</h2>
+                <div class="demo-container">
+                    <div class="demo-controls">
+                        <h3>Event Publisher</h3>
+                        <form id="event-form">
+                            <div class="form-group">
+                                <label for="event-type">Event Type</label>
+                                <select id="event-type">
+                                    <option value="order_created">Order Created</option>
+                                    <option value="payment_processed">Payment Processed</option>
+                                    <option value="shipment_created">Shipment Created</option>
+                                    <option value="order_delivered">Order Delivered</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="event-data">Event Data (JSON)</label>
+                                <textarea id="event-data" rows="6">
+{
+  "orderId": "ORD-12345",
+  "customer": "Govind",
+  "amount": 125.50,
+  "timestamp": "2023-11-15T10:30:00Z"
+}
+                                </textarea>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Publish Event</button>
+                        </form>
+                    </div>
+                    <div class="demo-output">
+                        <h3>Event Flow</h3>
+                        <div class="event-flow-diagram">
+                            <div class="event-node api-gateway">API Gateway</div>
+                            <div class="event-arrow">↓</div>
+                            <div class="event-node lambda">Lambda</div>
+                            <div class="event-arrow">↓</div>
+                            <div class="event-node sns">SNS</div>
+                            <div class="event-arrow">↓</div>
+                            <div class="event-branches">
+                                <div class="branch">
+                                    <div class="event-arrow">↓</div>
+                                    <div class="event-node sqs">SQS</div>
+                                    <div class="event-arrow">↓</div>
+                                    <div class="event-node lambda">Processor</div>
+                                </div>
+                                <div class="branch">
+                                    <div class="event-arrow">↓</div>
+                                    <div class="event-node dynamodb">DynamoDB</div>
+                                </div>
+                                <div class="branch">
+                                    <div class="event-arrow">↓</div>
+                                    <div class="event-node eventbridge">EventBridge</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="event-log">
+                            <h4>Event Log</h4>
+                            <div id="log-container">
+                                <div class="log-entry">System initialized and ready to process events</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="code">
+            <div class="container">
+                <h2>Implementation Code</h2>
+                <div class="code-tabs">
+                    <div class="tab active" data-tab="lambda-code">Lambda</div>
+                    <div class="tab" data-tab="cloudformation-code">CloudFormation</div>
+                    <div class="tab" data-tab="frontend-code">Frontend</div>
+                </div>
+                <div class="code-content">
+                    <div id="lambda-code" class="code-panel active">
+                        <pre><code>
+// Lambda function to process API Gateway events and publish to SNS
+exports.handler = async (event) => {
+    const AWS = require('aws-sdk');
+    const sns = new AWS.SNS();
+    
+    try {
+        // Parse the incoming event
+        const body = JSON.parse(event.body);
+        const eventType = body.eventType;
+        const eventData = body.data;
+        
+        // Add metadata
+        eventData.processedAt = new Date().toISOString();
+        eventData.source = "api-gateway";
+        
+        // Publish to SNS topic
+        const params = {
+            TopicArn: process.env.SNS_TOPIC_ARN,
+            Message: JSON.stringify(eventData),
+            MessageAttributes: {
+                'eventType': {
+                    DataType: 'String',
+                    StringValue: eventType
+                }
+            }
+        };
+        
+        await sns.publish(params).promise();
+        
+        return {
+            statusCode: 200,
+            body: JSON.stringify({
+                message: "Event published successfully",
+                eventId: eventData.orderId
+            })
+        };
+    } catch (error) {
+        console.error("Error:", error);
+        return {
+            statusCode: 500,
+            body: JSON.stringify({
+                message: "Failed to process event",
+                error: error.message
+            })
+        };
+    }
+};
+                        </code></pre>
+                    </div>
+                    <div id="cloudformation-code" class="code-panel">
+                        <pre><code>
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Event-Based Architecture Demo'
+
+Resources:
+  # SNS Topic for event publishing
+  EventTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: event-demo-topic
+      
+  # SQS Queue for processing events
+  EventQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: event-demo-queue
+      VisibilityTimeout: 60
+      
+  # Subscribe SQS to SNS
+  QueueSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref EventTopic
+      Protocol: sqs
+      Endpoint: !GetAtt EventQueue.Arn
+      
+  # DynamoDB Table for storing events
+  EventTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: event-demo-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: orderId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: orderId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+        
+  # Lambda function to process events
+  EventProcessor:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: event-processor
+      Runtime: nodejs14.x
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EventTopic
+          DYNAMODB_TABLE: !Ref EventTable
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            // Process events from API Gateway
+            // Publish to SNS topic
+          }
+                        </code></pre>
+                    </div>
+                    <div id="frontend-code" class="code-panel">
+                        <pre><code>
+// JavaScript for the event demo
+document.addEventListener('DOMContentLoaded', function() {
+    const eventForm = document.getElementById('event-form');
+    const logContainer = document.getElementById('log-container');
+    
+    eventForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+        
+        const eventType = document.getElementById('event-type').value;
+        const eventData = document.getElementById('event-data').value;
+        
+        try {
+            // Parse JSON data
+            const data = JSON.parse(eventData);
+            
+            // Add log entry
+            addLogEntry(`Publishing ${eventType} event...`);
+            
+            // Simulate API call
+            await simulateEventProcessing(eventType, data);
+            
+            // Add success log
+            addLogEntry(`Event ${eventType} published successfully!`, 'success');
+            
+            // Simulate event flow
+            simulateEventFlow(eventType, data);
+            
+        } catch (error) {
+            addLogEntry(`Error: ${error.message}`, 'error');
+        }
+    });
+    
+    function addLogEntry(message, type = 'info') {
+        const entry = document.createElement('div');
+        entry.className = `log-entry ${type}`;
+        entry.textContent = message;
+        logContainer.appendChild(entry);
+        logContainer.scrollTop = logContainer.scrollHeight;
+    }
+    
+    async function simulateEventProcessing(eventType, data) {
+        // Simulate processing delay
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        
+        // Highlight API Gateway node
+        highlightNode('api-gateway');
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Highlight Lambda node
+        highlightNode('lambda');
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Highlight SNS node
+        highlightNode('sns');
+        await new Promise(resolve => setTimeout(resolve, 800));
+        
+        // Highlight downstream services
+        highlightNode('sqs');
+        highlightNode('dynamodb');
+        highlightNode('eventbridge');
+        
+        addLogEntry(`Event data stored in DynamoDB: ${data.orderId}`);
+        addLogEntry(`Event sent to processing queue`);
+    }
+    
+    function highlightNode(nodeClass) {
+        const node = document.querySelector(`.event-node.${nodeClass}`);
+        node.classList.add('active');
+        setTimeout(() => {
+            node.classList.remove('active');
+        }, 2000);
+    }
+});
+                        </code></pre>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2023 AWS Event Architecture Demo by Govind</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-github"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

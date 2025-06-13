@@ -1,0 +1,88 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'Event-Based Architecture Demo'
+
+Resources:
+  # SNS Topic for event publishing
+  EventTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: event-demo-topic
+      
+  # SQS Queue for processing events
+  EventQueue:
+    Type: AWS::SQS::Queue
+    Properties:
+      QueueName: event-demo-queue
+      VisibilityTimeout: 60
+      
+  # Subscribe SQS to SNS
+  QueueSubscription:
+    Type: AWS::SNS::Subscription
+    Properties:
+      TopicArn: !Ref EventTopic
+      Protocol: sqs
+      Endpoint: !GetAtt EventQueue.Arn
+      
+  # DynamoDB Table for storing events
+  EventTable:
+    Type: AWS::DynamoDB::Table
+    Properties:
+      TableName: event-demo-table
+      BillingMode: PAY_PER_REQUEST
+      AttributeDefinitions:
+        - AttributeName: orderId
+          AttributeType: S
+        - AttributeName: timestamp
+          AttributeType: S
+      KeySchema:
+        - AttributeName: orderId
+          KeyType: HASH
+        - AttributeName: timestamp
+          KeyType: RANGE
+      StreamSpecification:
+        StreamViewType: NEW_AND_OLD_IMAGES
+        
+  # Lambda function to process events
+  EventProcessor:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: event-processor
+      Runtime: nodejs14.x
+      Handler: index.handler
+      Role: !GetAtt LambdaExecutionRole.Arn
+      Environment:
+        Variables:
+          SNS_TOPIC_ARN: !Ref EventTopic
+          DYNAMODB_TABLE: !Ref EventTable
+      Code:
+        ZipFile: |
+          exports.handler = async (event) => {
+            // Process events from API Gateway
+            // Publish to SNS topic
+          }
+          
+  # Lambda execution role
+  LambdaExecutionRole:
+    Type: AWS::IAM::Role
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: '2012-10-17'
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service: lambda.amazonaws.com
+            Action: 'sts:AssumeRole'
+      ManagedPolicyArns:
+        - 'arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole'
+      Policies:
+        - PolicyName: EventProcessingPolicy
+          PolicyDocument:
+            Version: '2012-10-17'
+            Statement:
+              - Effect: Allow
+                Action:
+                  - 'sns:Publish'
+                  - 'dynamodb:PutItem'
+                Resource: 
+                  - !Ref EventTopic
+                  - !GetAtt EventTable.Arn
