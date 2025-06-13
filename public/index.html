@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EduLearn LMS - AWS Cloud Architecture</title>
+    <title>AWS Cloud Academy - Learning Management System</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/lms-styles.css">
@@ -19,10 +19,10 @@
             </div>
             
             <ul class="nav-links">
-                <li><a href="#" class="active">Dashboard</a></li>
-                <li><a href="#">Courses</a></li>
-                <li><a href="#">Resources</a></li>
-                <li><a href="#">Community</a></li>
+                <li><a href="#" class="active" data-target="dashboard-page">Dashboard</a></li>
+                <li><a href="#" data-target="courses-page">Courses</a></li>
+                <li><a href="#" data-target="students-page">Students</a></li>
+                <li><a href="backend.html">Admin</a></li>
             </ul>
             
             <div class="user-menu">
@@ -58,523 +58,472 @@
         <!-- Sidebar -->
         <aside class="sidebar">
             <ul class="sidebar-menu">
-                <li><a href="#" class="active"><i class="fas fa-home"></i> Dashboard</a></li>
-                <li><a href="#"><i class="fas fa-book"></i> My Courses</a></li>
-                <li><a href="#"><i class="fas fa-calendar"></i> Schedule</a></li>
-                <li><a href="#"><i class="fas fa-tasks"></i> Assignments</a></li>
-                <li><a href="#"><i class="fas fa-chart-line"></i> Progress</a></li>
-                <li><a href="#"><i class="fas fa-users"></i> Community</a></li>
-                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+                <li><a href="#" class="active" data-target="dashboard-page"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" data-target="courses-page"><i class="fas fa-book"></i> My Courses</a></li>
+                <li><a href="#" data-target="students-page"><i class="fas fa-users"></i> Students</a></li>
+                <li><a href="#" data-target="performance-page"><i class="fas fa-chart-line"></i> Performance</a></li>
+                <li><a href="backend.html"><i class="fas fa-cog"></i> Admin Panel</a></li>
             </ul>
         </aside>
 
         <!-- Content -->
         <main class="content">
-            <h1 class="page-title">Welcome to Govind's AWS Cloud Architecture Course</h1>
-            
-            <!-- Stats Cards -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-card-header">
-                        <div class="stat-card-title">Enrolled Students</div>
-                        <div class="stat-card-icon icon-students">
-                            <i class="fas fa-users"></i>
+            <!-- Dashboard Page -->
+            <div id="dashboard-page" class="page" style="display: block;">
+                <h1 class="page-title">Welcome to Govind's AWS Cloud Architecture Course</h1>
+                
+                <!-- Stats Cards -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Enrolled Students</div>
+                            <div class="stat-card-icon icon-students">
+                                <i class="fas fa-users"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value">42</div>
+                        <div class="stat-card-change">
+                            <i class="fas fa-arrow-up"></i> Active learners
                         </div>
                     </div>
-                    <div class="stat-card-value">42</div>
-                    <div class="stat-card-change">
-                        <i class="fas fa-arrow-up"></i> Active learners
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Course Completion</div>
+                            <div class="stat-card-icon icon-courses">
+                                <i class="fas fa-graduation-cap"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value">68%</div>
+                        <div class="stat-card-change">
+                            <i class="fas fa-arrow-up"></i> Average progress
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Problems Solved</div>
+                            <div class="stat-card-icon icon-assignments">
+                                <i class="fas fa-code"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value">520</div>
+                        <div class="stat-card-change">
+                            <i class="fas fa-arrow-up"></i> Last week
+                        </div>
+                    </div>
+                    
+                    <div class="stat-card">
+                        <div class="stat-card-header">
+                            <div class="stat-card-title">Certification Ready</div>
+                            <div class="stat-card-icon icon-messages">
+                                <i class="fas fa-certificate"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card-value">18</div>
+                        <div class="stat-card-change">
+                            <i class="fas fa-arrow-up"></i> Students
+                        </div>
                     </div>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-card-header">
-                        <div class="stat-card-title">Course Completion</div>
-                        <div class="stat-card-icon icon-courses">
-                            <i class="fas fa-graduation-cap"></i>
+                <!-- SNS Demo Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span><i class="fas fa-cloud"></i> AWS SNS Notification Demo</span>
+                        <a href="#" class="btn btn-outline">Learn More</a>
+                    </h2>
+                    <p>This is a live demonstration of AWS Simple Notification Service (SNS) pattern. Send a notification below to see it in action.</p>
+                    
+                    <form id="sns-demo-controls" class="sns-demo-form">
+                        <div class="sns-form-group">
+                            <label for="sns-topic">Notification Type</label>
+                            <select id="sns-topic" required>
+                                <option value="announcement">Announcement</option>
+                                <option value="assignment">Assignment</option>
+                                <option value="grade">Grade Update</option>
+                                <option value="message">Message</option>
+                            </select>
                         </div>
-                    </div>
-                    <div class="stat-card-value">68%</div>
-                    <div class="stat-card-change">
-                        <i class="fas fa-arrow-up"></i> Average progress
-                    </div>
+                        
+                        <div class="sns-form-group">
+                            <label for="sns-message">Notification Message</label>
+                            <input type="text" id="sns-message" placeholder="Enter your notification message" required>
+                        </div>
+                        
+                        <div class="sns-form-submit">
+                            <button type="submit" class="btn btn-primary">Publish Notification</button>
+                        </div>
+                    </form>
                 </div>
                 
-                <div class="stat-card">
-                    <div class="stat-card-header">
-                        <div class="stat-card-title">Problems Solved</div>
-                        <div class="stat-card-icon icon-assignments">
-                            <i class="fas fa-code"></i>
+                <!-- Top Students Section -->
+                <div class="section">
+                    <h2 class="section-title">
+                        <span>Top Performing Students</span>
+                        <a href="#" class="btn btn-outline view-all-btn" data-target="students-page">View All</a>
+                    </h2>
+                    
+                    <div class="student-grid">
+                        <div class="student-card">
+                            <h3 class="student-name">Madhu Sudhan P</h3>
+                            <div class="student-job">AWS Solutions Architect</div>
+                            <div class="student-interests">
+                                <span>CloudFormation</span>
+                                <span>Lambda</span>
+                                <span>EC2</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card-value">520</div>
-                    <div class="stat-card-change">
-                        <i class="fas fa-arrow-up"></i> Last week
-                    </div>
-                </div>
-                
-                <div class="stat-card">
-                    <div class="stat-card-header">
-                        <div class="stat-card-title">Certification Ready</div>
-                        <div class="stat-card-icon icon-messages">
-                            <i class="fas fa-certificate"></i>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Bhushan</h3>
+                            <div class="student-job">DevOps Engineer</div>
+                            <div class="student-interests">
+                                <span>CI/CD</span>
+                                <span>Docker</span>
+                                <span>ECS</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
                         </div>
-                    </div>
-                    <div class="stat-card-value">18</div>
-                    <div class="stat-card-change">
-                        <i class="fas fa-arrow-up"></i> Students
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Sumanth Hegde</h3>
+                            <div class="student-job">Cloud Security Specialist</div>
+                            <div class="student-interests">
+                                <span>IAM</span>
+                                <span>Security Groups</span>
+                                <span>KMS</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Varun V R Manjaru</h3>
+                            <div class="student-job">Cloud Data Engineer</div>
+                            <div class="student-interests">
+                                <span>S3</span>
+                                <span>Redshift</span>
+                                <span>Glue</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             
-            <!-- SNS Demo Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span><i class="fas fa-cloud"></i> AWS SNS Notification Demo</span>
-                    <a href="#" class="btn btn-outline">Learn More</a>
-                </h2>
-                <p>This is a live demonstration of AWS Simple Notification Service (SNS) pattern. Send a notification below to see it in action.</p>
+            <!-- Courses Page -->
+            <div id="courses-page" class="page" style="display: none;">
+                <h1 class="page-title">AWS Cloud Courses</h1>
                 
-                <form id="sns-demo-controls" class="sns-demo-form">
-                    <div class="sns-form-group">
-                        <label for="sns-topic">Notification Type</label>
-                        <select id="sns-topic" required>
-                            <option value="announcement">Announcement</option>
-                            <option value="assignment">Assignment</option>
-                            <option value="grade">Grade Update</option>
-                            <option value="message">Message</option>
-                        </select>
-                    </div>
+                <div class="section">
+                    <h2 class="section-title">
+                        <span>Available Courses</span>
+                        <a href="#" class="btn btn-primary">Enroll in New Course</a>
+                    </h2>
                     
-                    <div class="sns-form-group">
-                        <label for="sns-message">Notification Message</label>
-                        <input type="text" id="sns-message" placeholder="Enter your notification message" required>
-                    </div>
-                    
-                    <div class="sns-form-submit">
-                        <button type="submit" class="btn btn-primary">Publish Notification</button>
-                    </div>
-                </form>
-            </div>
-            
-            <!-- Students Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span>Top Performing Students</span>
-                    <a href="#" class="btn btn-outline">View All</a>
-                </h2>
-                
-                <div class="student-grid">
-                    <div class="student-card">
-                        <h3 class="student-name">Madhu Sudhan P</h3>
-                        <div class="student-job">AWS Solutions Architect</div>
-                        <div class="student-interests">
-                            <span>CloudFormation</span>
-                            <span>Lambda</span>
-                            <span>EC2</span>
+                    <div class="courses-grid">
+                        <div class="course-card">
+                            <div class="course-image">
+                                <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZ3JhbW1pbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Course Image">
+                            </div>
+                            <div class="course-content">
+                                <div class="course-category">AWS</div>
+                                <h3 class="course-title">AWS Cloud Architecture Fundamentals</h3>
+                                <div class="course-instructor">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                                    <span>Govind (Instructor)</span>
+                                </div>
+                                <div class="course-footer">
+                                    <div class="course-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>4.9</span>
+                                    </div>
+                                    <div class="course-students">
+                                        <i class="fas fa-user"></i>
+                                        <span>1,240 students</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Bhushan</h3>
-                        <div class="student-job">DevOps Engineer</div>
-                        <div class="student-interests">
-                            <span>CI/CD</span>
-                            <span>Docker</span>
-                            <span>ECS</span>
+                        
+                        <div class="course-card">
+                            <div class="course-image">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGF0YSUyMHNjaWVuY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Course Image">
+                            </div>
+                            <div class="course-content">
+                                <div class="course-category">DevOps</div>
+                                <h3 class="course-title">CI/CD Pipeline Implementation</h3>
+                                <div class="course-instructor">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                                    <span>Govind (Instructor)</span>
+                                </div>
+                                <div class="course-footer">
+                                    <div class="course-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>4.8</span>
+                                    </div>
+                                    <div class="course-students">
+                                        <i class="fas fa-user"></i>
+                                        <span>950 students</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Sumanth Hegde</h3>
-                        <div class="student-job">Cloud Security Specialist</div>
-                        <div class="student-interests">
-                            <span>IAM</span>
-                            <span>Security Groups</span>
-                            <span>KMS</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Varun V R Manjaru</h3>
-                        <div class="student-job">Cloud Data Engineer</div>
-                        <div class="student-interests">
-                            <span>S3</span>
-                            <span>Redshift</span>
-                            <span>Glue</span>
+                        
+                        <div class="course-card">
+                            <div class="course-image">
+                                <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZGVzaWdufGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Course Image">
+                            </div>
+                            <div class="course-content">
+                                <div class="course-category">Cloud Security</div>
+                                <h3 class="course-title">AWS Security Best Practices</h3>
+                                <div class="course-instructor">
+                                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                                    <span>Govind (Instructor)</span>
+                                </div>
+                                <div class="course-footer">
+                                    <div class="course-rating">
+                                        <i class="fas fa-star"></i>
+                                        <span>4.7</span>
+                                    </div>
+                                    <div class="course-students">
+                                        <i class="fas fa-user"></i>
+                                        <span>820 students</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
             
-            <!-- All Students Section -->
-            <div class="section">
-                <h2 class="section-title">
-                    <span>Enrolled Students</span>
-                    <a href="#" class="btn btn-outline">Export List</a>
-                </h2>
+            <!-- Students Page -->
+            <div id="students-page" class="page" style="display: none;">
+                <h1 class="page-title">Enrolled Students</h1>
                 
-                <div class="student-grid">
-                    <div class="student-card">
-                        <h3 class="student-name">Nugala Vinay Chowdari</h3>
-                        <div class="student-job">AWS Cloud Engineer</div>
-                        <div class="student-interests">
-                            <span>EC2</span>
-                            <span>VPC</span>
-                        </div>
-                    </div>
+                <div class="section">
+                    <h2 class="section-title">
+                        <span>Student Directory</span>
+                        <button class="btn btn-outline export-btn">Export List</button>
+                    </h2>
                     
-                    <div class="student-card">
-                        <h3 class="student-name">Abhinay</h3>
-                        <div class="student-job">Cloud Infrastructure Specialist</div>
-                        <div class="student-interests">
-                            <span>CloudFormation</span>
-                            <span>Terraform</span>
+                    <div class="student-grid">
+                        <!-- First row of students -->
+                        <div class="student-card">
+                            <h3 class="student-name">Nugala Vinay Chowdari</h3>
+                            <div class="student-job">AWS Cloud Engineer</div>
+                            <div class="student-interests">
+                                <span>EC2</span>
+                                <span>VPC</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
                         </div>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Abhinay</h3>
+                            <div class="student-job">Cloud Infrastructure Specialist</div>
+                            <div class="student-interests">
+                                <span>CloudFormation</span>
+                                <span>Terraform</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <!-- More student cards... -->
+                        <div class="student-card">
+                            <h3 class="student-name">Abhishek Sharma</h3>
+                            <div class="student-job">AWS Network Engineer</div>
+                            <div class="student-interests">
+                                <span>VPC</span>
+                                <span>Route53</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Telluri Sai Jaideep Reddy</h3>
+                            <div class="student-job">Cloud Application Developer</div>
+                            <div class="student-interests">
+                                <span>Lambda</span>
+                                <span>API Gateway</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <!-- More students would be listed here... -->
                     </div>
+                </div>
+            </div>
+            
+            <!-- Performance Page -->
+            <div id="performance-page" class="page" style="display: none;">
+                <h1 class="page-title">Student Performance</h1>
+                
+                <div class="section">
+                    <h2 class="section-title">
+                        <span>Top Problem Solvers</span>
+                        <a href="backend.html" class="btn btn-outline">View Full Report</a>
+                    </h2>
                     
-                    <div class="student-card">
-                        <h3 class="student-name">Abhishek Sharma</h3>
-                        <div class="student-job">AWS Network Engineer</div>
-                        <div class="student-interests">
-                            <span>VPC</span>
-                            <span>Route53</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Telluri Sai Jaideep Reddy</h3>
-                        <div class="student-job">Cloud Application Developer</div>
-                        <div class="student-interests">
-                            <span>Lambda</span>
-                            <span>API Gateway</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Aravind</h3>
-                        <div class="student-job">Serverless Architect</div>
-                        <div class="student-interests">
-                            <span>Lambda</span>
-                            <span>DynamoDB</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Vivek Kumar Singh</h3>
-                        <div class="student-job">Cloud Migration Specialist</div>
-                        <div class="student-interests">
-                            <span>Migration Hub</span>
-                            <span>AWS Transfer</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Adnan Mohammed</h3>
-                        <div class="student-job">AWS Database Administrator</div>
-                        <div class="student-interests">
-                            <span>RDS</span>
-                            <span>Aurora</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Subham Samir</h3>
-                        <div class="student-job">Cloud Cost Optimization Specialist</div>
-                        <div class="student-interests">
-                            <span>Cost Explorer</span>
-                            <span>Budgets</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Narendran</h3>
-                        <div class="student-job">AWS Support Engineer</div>
-                        <div class="student-interests">
-                            <span>CloudWatch</span>
-                            <span>CloudTrail</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Dhananjay Bilgaye</h3>
-                        <div class="student-job">Cloud Automation Engineer</div>
-                        <div class="student-interests">
-                            <span>Systems Manager</span>
-                            <span>CloudFormation</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Niyati Jain</h3>
-                        <div class="student-job">AWS Solutions Architect</div>
-                        <div class="student-interests">
-                            <span>Well-Architected</span>
-                            <span>CloudFront</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Akash Yadav</h3>
-                        <div class="student-job">Cloud Security Engineer</div>
-                        <div class="student-interests">
-                            <span>GuardDuty</span>
-                            <span>WAF</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Nitesh Karnam</h3>
-                        <div class="student-job">AWS DevOps Engineer</div>
-                        <div class="student-interests">
-                            <span>CodePipeline</span>
-                            <span>CodeBuild</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Phanindra Peddina</h3>
-                        <div class="student-job">Cloud Networking Specialist</div>
-                        <div class="student-interests">
-                            <span>Transit Gateway</span>
-                            <span>Direct Connect</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Satyajit Pani</h3>
-                        <div class="student-job">AWS Certified Developer</div>
-                        <div class="student-interests">
-                            <span>Elastic Beanstalk</span>
-                            <span>ECS</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Shuvam</h3>
-                        <div class="student-job">Cloud Infrastructure Engineer</div>
-                        <div class="student-interests">
-                            <span>EC2</span>
-                            <span>Auto Scaling</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Hema</h3>
-                        <div class="student-job">AWS Machine Learning Engineer</div>
-                        <div class="student-interests">
-                            <span>SageMaker</span>
-                            <span>Comprehend</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Raghunath Pradhan</h3>
-                        <div class="student-job">Cloud Storage Specialist</div>
-                        <div class="student-interests">
-                            <span>S3</span>
-                            <span>EFS</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Sovan Keshri</h3>
-                        <div class="student-job">AWS Certified SysOps</div>
-                        <div class="student-interests">
-                            <span>Systems Manager</span>
-                            <span>CloudWatch</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Anurag Kumar Gautam</h3>
-                        <div class="student-job">Cloud Compliance Specialist</div>
-                        <div class="student-interests">
-                            <span>Config</span>
-                            <span>Security Hub</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Abhishek Banik</h3>
-                        <div class="student-job">AWS Integration Specialist</div>
-                        <div class="student-interests">
-                            <span>EventBridge</span>
-                            <span>Step Functions</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Nitin C</h3>
-                        <div class="student-job">Cloud Monitoring Engineer</div>
-                        <div class="student-interests">
-                            <span>CloudWatch</span>
-                            <span>X-Ray</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Aditya Lokapalli</h3>
-                        <div class="student-job">AWS Serverless Developer</div>
-                        <div class="student-interests">
-                            <span>Lambda</span>
-                            <span>API Gateway</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Monis</h3>
-                        <div class="student-job">Cloud Architect</div>
-                        <div class="student-interests">
-                            <span>Well-Architected</span>
-                            <span>Control Tower</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Suhail Siddiqui</h3>
-                        <div class="student-job">AWS Network Specialist</div>
-                        <div class="student-interests">
-                            <span>VPC</span>
-                            <span>Route53</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Rahul Prasad</h3>
-                        <div class="student-job">Cloud DevSecOps Engineer</div>
-                        <div class="student-interests">
-                            <span>CodePipeline</span>
-                            <span>Inspector</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Prakhar Kumar</h3>
-                        <div class="student-job">AWS Certified Solutions Architect</div>
-                        <div class="student-interests">
-                            <span>Architecture</span>
-                            <span>Migration</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Ravikanth Mallappa</h3>
-                        <div class="student-job">Cloud Operations Engineer</div>
-                        <div class="student-interests">
-                            <span>OpsWorks</span>
-                            <span>CloudFormation</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Karthik Mohan</h3>
-                        <div class="student-job">AWS Database Specialist</div>
-                        <div class="student-interests">
-                            <span>RDS</span>
-                            <span>DynamoDB</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Veturi Lakshmi Prathyusha</h3>
-                        <div class="student-job">Cloud Application Architect</div>
-                        <div class="student-interests">
-                            <span>Elastic Beanstalk</span>
-                            <span>AppSync</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Vikranth</h3>
-                        <div class="student-job">AWS IoT Specialist</div>
-                        <div class="student-interests">
-                            <span>IoT Core</span>
-                            <span>Greengrass</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Namitha T K</h3>
-                        <div class="student-job">Cloud Analytics Engineer</div>
-                        <div class="student-interests">
-                            <span>Athena</span>
-                            <span>QuickSight</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Suryansh</h3>
-                        <div class="student-job">AWS Certified Developer</div>
-                        <div class="student-interests">
-                            <span>Lambda</span>
-                            <span>DynamoDB</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Chanchal Khatua</h3>
-                        <div class="student-job">Cloud Security Analyst</div>
-                        <div class="student-interests">
-                            <span>IAM</span>
-                            <span>Security Hub</span>
-                        </div>
-                    </div>
-                    
-                    <div class="student-card">
-                        <h3 class="student-name">Udit Mishra</h3>
-                        <div class="student-job">AWS Containers Specialist</div>
-                        <div class="student-interests">
-                            <span>ECS</span>
-                            <span>EKS</span>
-                        </div>
+                    <div class="backend-card">
+                        <table class="backend-table">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Problems Solved</th>
+                                    <th>Difficulty Level</th>
+                                    <th>Rank</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Madhu Sudhan P</td>
+                                    <td>105</td>
+                                    <td>Advanced</td>
+                                    <td>1</td>
+                                </tr>
+                                <tr>
+                                    <td>Bhushan</td>
+                                    <td>40</td>
+                                    <td>Intermediate</td>
+                                    <td>5</td>
+                                </tr>
+                                <tr>
+                                    <td>Sumanth Hegde</td>
+                                    <td>39</td>
+                                    <td>Intermediate</td>
+                                    <td>6</td>
+                                </tr>
+                                <tr>
+                                    <td>Varun V R Manjaru</td>
+                                    <td>36</td>
+                                    <td>Intermediate</td>
+                                    <td>7</td>
+                                </tr>
+                                <tr>
+                                    <td>Prakhar Kumar</td>
+                                    <td>32</td>
+                                    <td>Intermediate</td>
+                                    <td>8</td>
+                                </tr>
+                                <tr>
+                                    <td>Abhinay</td>
+                                    <td>30</td>
+                                    <td>Intermediate</td>
+                                    <td>9</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </main>
     </div>
+    
+    <!-- Modals -->
+    <!-- Student Profile Modal -->
+    <div class="modal-overlay" id="student-profile-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Student Profile</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <h4 class="student-job-title">AWS Solutions Architect</h4>
+                <p>This student is currently working on AWS Cloud Architecture certification and has completed 85% of the course material.</p>
+                
+                <div class="tabs">
+                    <div class="tab active" data-tab="profile-tab-1">Progress</div>
+                    <div class="tab" data-tab="profile-tab-2">Assignments</div>
+                    <div class="tab" data-tab="profile-tab-3">Certifications</div>
+                </div>
+                
+                <div id="profile-tab-1" class="tab-content active">
+                    <p>Course progress: 85%</p>
+                    <p>Assignments completed: 12/15</p>
+                    <p>Quiz average score: 92%</p>
+                </div>
+                
+                <div id="profile-tab-2" class="tab-content">
+                    <p>Recent assignments:</p>
+                    <ul>
+                        <li>AWS VPC Design - Grade: A</li>
+                        <li>CloudFormation Templates - Grade: A+</li>
+                        <li>Lambda Functions - Grade: B+</li>
+                    </ul>
+                </div>
+                
+                <div id="profile-tab-3" class="tab-content">
+                    <p>Certification progress:</p>
+                    <ul>
+                        <li>AWS Certified Solutions Architect - Associate: In Progress (85%)</li>
+                        <li>AWS Certified Developer - Associate: Not Started</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline modal-cancel">Close</button>
+                <button class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Modal -->
+    <div class="modal-overlay" id="contact-modal">
+        <div class="modal">
+            <div class="modal-header">
+                <h3 class="modal-title">Contact Student</h3>
+                <button class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="contact-form">
+                    <div class="form-group">
+                        <label for="contact-name">Student Name</label>
+                        <input type="text" id="contact-name" class="form-control" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-subject">Subject</label>
+                        <input type="text" id="contact-subject" class="form-control" placeholder="Enter subject">
+                    </div>
+                    <div class="form-group">
+                        <label for="contact-message">Message</label>
+                        <textarea id="contact-message" class="form-control" rows="5" placeholder="Enter your message"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-outline modal-cancel">Cancel</button>
+                <button type="submit" form="contact-form" class="btn btn-primary">Send Message</button>
+            </div>
+        </div>
+    </div>
 
     <script src="js/sns-demo.js"></script>
-    <script>
-        // Simple script to handle mobile sidebar toggle
-        document.addEventListener('DOMContentLoaded', function() {
-            // Add mobile toggle button if needed
-            const header = document.querySelector('.header-container');
-            const mobileToggle = document.createElement('button');
-            mobileToggle.classList.add('mobile-toggle');
-            mobileToggle.innerHTML = '<i class="fas fa-bars"></i>';
-            header.prepend(mobileToggle);
-            
-            // Handle sidebar toggle
-            mobileToggle.addEventListener('click', function() {
-                const sidebar = document.querySelector('.sidebar');
-                sidebar.classList.toggle('active');
-            });
-            
-            // Add animation classes with delay
-            const animatedElements = document.querySelectorAll('.stat-card, .course-card, .event-item, .student-card');
-            animatedElements.forEach((el, index) => {
-                el.style.opacity = '0';
-                setTimeout(() => {
-                    el.style.opacity = '1';
-                    el.style.transform = 'translateY(0)';
-                }, 50 * (index + 1));
-            });
-            
-            // Mark all notifications as read
-            const markAllReadBtn = document.querySelector('.mark-all-read');
-            if (markAllReadBtn) {
-                markAllReadBtn.addEventListener('click', function() {
-                    const unreadItems = document.querySelectorAll('.notification-item.unread');
-                    unreadItems.forEach(item => {
-                        item.classList.remove('unread');
-                        if (window.SNS) {
-                            window.SNS.markAsRead(parseInt(item.dataset.id));
-                        }
-                    });
-                });
-            }
-        });
-    </script>
+    <script src="js/main.js"></script>
 </body>
 </html>
