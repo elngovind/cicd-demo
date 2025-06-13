@@ -36,15 +36,8 @@ Resources:
             Resource:
               - !Sub 'arn:aws:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/codebuild/*'
           - Effect: Allow
-            Action:
-              - 's3:PutObject'
-              - 's3:GetObject'
-              - 's3:GetObjectVersion'
-              - 's3:GetBucketAcl'
-              - 's3:GetBucketLocation'
-            Resource:
-              - !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
-              - !Sub 'arn:aws:s3:::${ArtifactBucket}'
+            Action: 's3:*'
+            Resource: '*'
       Roles:
         - !Ref CodeBuildServiceRole
 
@@ -92,15 +85,8 @@ Resources:
         Version: '2012-10-17'
         Statement:
           - Effect: Allow
-            Action:
-              - 's3:GetObject'
-              - 's3:GetObjectVersion'
-              - 's3:GetBucketVersioning'
-              - 's3:PutObject'
-              - 's3:ListBucket'
-            Resource:
-              - !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
-              - !Sub 'arn:aws:s3:::${ArtifactBucket}'
+            Action: 's3:*'
+            Resource: '*'
           - Effect: Allow
             Action:
               - 'codebuild:BatchGetBuilds'

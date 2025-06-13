@@ -28,29 +28,36 @@ Resources:
         - Key: CreatedDate
           Value: "2025-03-15"
 
-  ArtifactBucketPolicy:
-    Type: AWS::S3::BucketPolicy
-    Properties:
-      Bucket: !Ref ArtifactBucket
-      PolicyDocument:
-        Version: '2012-10-17'
-        Statement:
-          - Sid: DenyUnEncryptedObjectUploads
-            Effect: Deny
-            Principal: '*'
-            Action: 's3:PutObject'
-            Resource: !Sub '${ArtifactBucket.Arn}/*'
-            Condition:
-              StringNotEquals:
-                's3:x-amz-server-side-encryption': 'AES256'
-          - Sid: DenyInsecureConnections
-            Effect: Deny
-            Principal: '*'
-            Action: 's3:*'
-            Resource: !Sub '${ArtifactBucket.Arn}/*'
-            Condition:
-              Bool:
-                'aws:SecureTransport': false
+  # Removing the bucket policy to avoid conflicts with IAM role policies
+  # ArtifactBucketPolicy:
+  #   Type: AWS::S3::BucketPolicy
+  #   Properties:
+  #     Bucket: !Ref ArtifactBucket
+  #     PolicyDocument:
+  #       Version: '2012-10-17'
+  #       Statement:
+  #         - Sid: AllowSSEAlgorithmParameter
+  #           Effect: Allow
+  #           Principal:
+  #             AWS: !Sub 'arn:aws:iam::${AWS::AccountId}:root'
+  #           Action: 's3:PutObject'
+  #           Resource: !Sub '${ArtifactBucket.Arn}/*'
+  #         - Sid: DenyUnEncryptedObjectUploads
+  #           Effect: Deny
+  #           Principal: '*'
+  #           Action: 's3:PutObject'
+  #           Resource: !Sub '${ArtifactBucket.Arn}/*'
+  #           Condition:
+  #             StringNotEquals:
+  #               's3:x-amz-server-side-encryption': 'AES256'
+  #         - Sid: DenyInsecureConnections
+  #           Effect: Deny
+  #           Principal: '*'
+  #           Action: 's3:*'
+  #           Resource: !Sub '${ArtifactBucket.Arn}/*'
+  #           Condition:
+  #             Bool:
+  #               'aws:SecureTransport': false
 
 Outputs:
   ArtifactBucketName:
