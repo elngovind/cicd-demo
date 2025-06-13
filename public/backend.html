@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/lms-styles.css">
     <link rel="stylesheet" href="css/sns-styles.css">
+    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <!-- Header -->
@@ -19,18 +20,21 @@
             </div>
             
             <ul class="nav-links">
-                <li><a href="index.html">Dashboard</a></li>
-                <li><a href="#" class="active">Admin</a></li>
-                <li><a href="#">Reports</a></li>
-                <li><a href="#">Settings</a></li>
+                <li><a href="index.html"><i class="fas fa-home"></i> Dashboard</a></li>
+                <li><a href="#" class="active"><i class="fas fa-cog"></i> Admin</a></li>
+                <li><a href="#"><i class="fas fa-chart-bar"></i> Reports</a></li>
+                <li><a href="#"><i class="fas fa-sliders-h"></i> Settings</a></li>
             </ul>
             
             <div class="user-menu">
                 <a href="#" class="btn btn-outline">
                     <i class="fas fa-bell"></i>
                 </a>
-                <div class="user-avatar">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                <div class="user-info">
+                    <span class="user-name">Govind</span>
+                    <div class="user-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                    </div>
                 </div>
             </div>
         </div>
@@ -275,5 +279,6 @@
     </div>
 
     <script src="js/main.js"></script>
+    <script src="js/interactive.js"></script>
 </body>
 </html>

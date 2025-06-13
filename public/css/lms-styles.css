@@ -135,6 +135,12 @@ a:hover {
   font-weight: 500;
   padding: 0.5rem 0;
   position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.nav-links a i {
+  margin-right: 0.5rem;
 }
 
 .nav-links a:after {
@@ -158,6 +164,10 @@ a:hover {
   color: var(--primary);
 }
 
+.nav-links a.home-btn {
+  font-weight: 600;
+}
+
 .user-menu {
   display: flex;
   align-items: center;
@@ -167,12 +177,23 @@ a:hover {
   margin-left: 1rem;
 }
 
+.user-info {
+  display: flex;
+  align-items: center;
+  margin-left: 1rem;
+}
+
+.user-name {
+  font-weight: 600;
+  color: var(--primary);
+  margin-right: 0.75rem;
+}
+
 .user-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
   overflow: hidden;
-  margin-left: 1rem;
   cursor: pointer;
   border: 2px solid var(--primary);
 }
@@ -665,6 +686,25 @@ a:hover {
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 102, 204, 0.4);
+  }
+  70% {
+    transform: scale(1.05);
+    box-shadow: 0 0 0 10px rgba(0, 102, 204, 0);
+  }
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(0, 102, 204, 0);
+  }
+}
+
+.pulse-animation {
+  animation: pulse 1s ease-in-out;
 }
 
 .stat-card, .student-card, .backend-card {

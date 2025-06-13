@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/lms-styles.css">
     <link rel="stylesheet" href="css/sns-styles.css">
+    <link rel="stylesheet" href="css/interactive.css">
 </head>
 <body>
     <!-- Header -->
@@ -19,7 +20,7 @@
             </div>
             
             <ul class="nav-links">
-                <li><a href="#" class="active" data-target="dashboard-page">Dashboard</a></li>
+                <li><a href="#" class="active home-btn" data-target="dashboard-page"><i class="fas fa-home"></i> Home</a></li>
                 <li><a href="#" data-target="courses-page">Courses</a></li>
                 <li><a href="#" data-target="students-page">Students</a></li>
                 <li><a href="backend.html">Admin</a></li>
@@ -46,8 +47,11 @@
                     </div>
                 </div>
                 
-                <div class="user-avatar">
-                    <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                <div class="user-info">
+                    <span class="user-name">Govind</span>
+                    <div class="user-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                    </div>
                 </div>
             </div>
         </div>
@@ -348,7 +352,6 @@
                             </div>
                         </div>
                         
-                        <!-- More student cards... -->
                         <div class="student-card">
                             <h3 class="student-name">Abhishek Sharma</h3>
                             <div class="student-job">AWS Network Engineer</div>
@@ -368,6 +371,32 @@
                             <div class="student-interests">
                                 <span>Lambda</span>
                                 <span>API Gateway</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Nitesh Karnam</h3>
+                            <div class="student-job">AWS Solutions Architect</div>
+                            <div class="student-interests">
+                                <span>CloudFormation</span>
+                                <span>ECS</span>
+                            </div>
+                            <div class="student-actions">
+                                <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
+                                <button class="btn btn-primary contact-btn" data-modal="contact-modal">Contact</button>
+                            </div>
+                        </div>
+                        
+                        <div class="student-card">
+                            <h3 class="student-name">Phanindra Peddina</h3>
+                            <div class="student-job">DevOps Engineer</div>
+                            <div class="student-interests">
+                                <span>CI/CD</span>
+                                <span>CodePipeline</span>
                             </div>
                             <div class="student-actions">
                                 <button class="btn btn-outline view-profile-btn" data-modal="student-profile-modal">View Profile</button>
@@ -525,5 +554,6 @@
 
     <script src="js/sns-demo.js"></script>
     <script src="js/main.js"></script>
+    <script src="js/interactive.js"></script>
 </body>
 </html>

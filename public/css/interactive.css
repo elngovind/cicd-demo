@@ -1,0 +1,215 @@
+/* Interactive features styles */
+
+/* Search and filter */
+.search-container {
+  display: flex;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.search-input {
+  flex: 1;
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-light);
+  border-radius: 4px;
+  font-family: var(--font-family);
+  transition: all 0.3s ease;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 2px rgba(0, 102, 204, 0.2);
+}
+
+.filter-select {
+  padding: 0.75rem 1rem;
+  border: 1px solid var(--gray-light);
+  border-radius: 4px;
+  font-family: var(--font-family);
+  background-color: white;
+  min-width: 150px;
+}
+
+.filter-select:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+/* Drag and drop */
+.dragging {
+  opacity: 0.7;
+  transform: scale(0.95);
+}
+
+.drag-over {
+  border: 2px dashed var(--primary);
+  background-color: rgba(0, 102, 204, 0.05);
+}
+
+/* Tooltips */
+.tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--dark);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  white-space: nowrap;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+  pointer-events: none;
+  margin-bottom: 5px;
+  z-index: 1000;
+}
+
+.tooltip:after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border-width: 5px;
+  border-style: solid;
+  border-color: var(--dark) transparent transparent transparent;
+}
+
+.show-tooltip {
+  opacity: 1;
+  visibility: visible;
+}
+
+/* User dropdown */
+.user-dropdown {
+  position: absolute;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  width: 220px;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(10px);
+  transition: all 0.3s ease;
+}
+
+.show-dropdown {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+.user-dropdown-menu {
+  list-style: none;
+  padding: 0.5rem 0;
+}
+
+.user-dropdown-menu li {
+  padding: 0;
+}
+
+.user-dropdown-menu a {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  color: var(--dark);
+  transition: all 0.3s ease;
+}
+
+.user-dropdown-menu a:hover {
+  background-color: rgba(0, 102, 204, 0.1);
+}
+
+.user-dropdown-menu i {
+  margin-right: 0.75rem;
+  width: 20px;
+  text-align: center;
+}
+
+.user-dropdown-menu .divider {
+  height: 1px;
+  background-color: var(--gray-light);
+  margin: 0.5rem 0;
+}
+
+.logout-link {
+  color: var(--danger) !important;
+}
+
+/* Interactive toast */
+.interactive-toast {
+  position: fixed;
+  bottom: 20px;
+  left: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.15);
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  z-index: 1100;
+  transform: translateY(100px);
+  opacity: 0;
+  transition: all 0.3s ease;
+  max-width: 350px;
+}
+
+.interactive-toast.show-toast {
+  transform: translateY(0);
+  opacity: 1;
+}
+
+.toast-icon {
+  margin-right: 1rem;
+  font-size: 1.5rem;
+}
+
+.toast-info .toast-icon {
+  color: var(--primary);
+}
+
+.toast-success .toast-icon {
+  color: var(--success);
+}
+
+.toast-warning .toast-icon {
+  color: var(--warning);
+}
+
+.toast-error .toast-icon {
+  color: var(--danger);
+}
+
+.toast-content {
+  flex: 1;
+  font-size: 0.875rem;
+}
+
+.toast-close {
+  background: none;
+  border: none;
+  color: var(--gray);
+  cursor: pointer;
+  padding: 0.25rem;
+  margin-left: 0.5rem;
+}
+
+/* Typing effect */
+.typing-cursor {
+  display: inline-block;
+  width: 3px;
+  height: 1.2em;
+  background-color: var(--dark);
+  margin-left: 2px;
+  animation: blink 1s infinite;
+  vertical-align: middle;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}

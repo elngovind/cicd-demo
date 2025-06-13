@@ -33,6 +33,17 @@ document.addEventListener('DOMContentLoaded', function() {
         }, 50 * (index + 1));
     });
     
+    // Add pulse animation to home button
+    const homeBtn = document.querySelector('.home-btn');
+    if (homeBtn) {
+        setTimeout(() => {
+            homeBtn.classList.add('pulse-animation');
+            setTimeout(() => {
+                homeBtn.classList.remove('pulse-animation');
+            }, 2000);
+        }, 1000);
+    }
+    
     // Mark all notifications as read
     const markAllReadBtn = document.querySelector('.mark-all-read');
     if (markAllReadBtn) {
