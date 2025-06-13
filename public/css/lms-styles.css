@@ -297,7 +297,15 @@ a:hover {
   margin-right: 0.25rem;
 }
 
-/* Course Cards */
+/* Section Styles */
+.section {
+  background-color: white;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+}
+
 .section-title {
   font-size: 1.5rem;
   font-weight: 600;
@@ -311,6 +319,57 @@ a:hover {
   font-size: 0.875rem;
 }
 
+/* Student List */
+.student-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.student-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid var(--gray-light);
+  padding: 1.5rem;
+}
+
+.student-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.student-name {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+}
+
+.student-job {
+  font-size: 0.9rem;
+  color: var(--primary);
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+}
+
+.student-interests {
+  font-size: 0.85rem;
+  color: var(--gray);
+}
+
+.student-interests span {
+  display: inline-block;
+  background-color: var(--gray-light);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Course Cards */
 .courses-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
@@ -505,6 +564,10 @@ a:hover {
     grid-template-columns: 1fr;
   }
   
+  .student-grid {
+    grid-template-columns: 1fr;
+  }
+  
   .nav-links {
     display: none;
   }
@@ -522,7 +585,7 @@ a:hover {
   }
 }
 
-.stat-card, .course-card, .event-item {
+.stat-card, .course-card, .event-item, .student-card {
   animation: fadeIn 0.5s ease forwards;
 }
 
@@ -530,11 +593,3 @@ a:hover {
 .stat-card:nth-child(2) { animation-delay: 0.2s; }
 .stat-card:nth-child(3) { animation-delay: 0.3s; }
 .stat-card:nth-child(4) { animation-delay: 0.4s; }
-
-.course-card:nth-child(1) { animation-delay: 0.5s; }
-.course-card:nth-child(2) { animation-delay: 0.6s; }
-.course-card:nth-child(3) { animation-delay: 0.7s; }
-
-.event-item:nth-child(1) { animation-delay: 0.8s; }
-.event-item:nth-child(2) { animation-delay: 0.9s; }
-.event-item:nth-child(3) { animation-delay: 1s; }
