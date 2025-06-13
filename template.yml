@@ -582,9 +582,29 @@ Resources:
         UserData:
           Fn::Base64: !Sub |
             #!/bin/bash -xe
-            # Minimal setup - no signaling required
+            # Update system packages
+            yum update -y
+            
+            # Install CodeDeploy agent
+            yum install -y ruby wget
+            cd /home/ec2-user
+            wget https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install
+            chmod +x ./install
+            ./install auto
+            service codedeploy-agent start
+            systemctl enable codedeploy-agent
+            
+            # Install Node.js
+            curl -sL https://rpm.nodesource.com/setup_${NodejsVersion} | bash -
+            yum install -y nodejs
+            
+            # Create application directory
+            mkdir -p /var/www/html
+            chmod -R 755 /var/www/html
+            
+            # Log completion
             mkdir -p /var/log/cloud-init
-            echo "Minimal initialization complete" > /var/log/cloud-init/cloud-init.log
+            echo "Initialization complete with CodeDeploy agent installed" > /var/log/cloud-init/cloud-init.log
         MetadataOptions:
           HttpTokens: required
           HttpEndpoint: enabled
