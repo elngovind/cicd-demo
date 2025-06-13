@@ -35,24 +35,66 @@ The CI/CD pipeline uses the following AWS services:
 ### 1. CloudFormation-Based Deployment (Recommended)
 
 #### Prerequisites
-- AWS CLI configured with appropriate permissions
 - An Auto Scaling Group for deployment targets
 - A CodeStar Connection to GitHub
 
-#### Step 1: Upload Templates to S3
-```bash
-cd cfn
-./deploy-templates.sh your-template-bucket-name
-```
+#### Option A: AWS Console Deployment
 
-#### Step 2: Create CodeStar Connection
+##### Step 1: Create S3 Bucket for Templates
+1. Go to AWS Console > S3
+2. Click "Create bucket"
+3. Enter a unique bucket name and select your region
+4. Keep default settings and click "Create bucket"
+5. Upload all CloudFormation templates from the `cfn/` directory to this bucket
+
+##### Step 2: Create CodeStar Connection
 1. Go to AWS Console > Developer Tools > Settings > Connections
 2. Click "Create connection"
 3. Select "GitHub" as the provider
 4. Follow the prompts to connect to your GitHub account
 5. Note the ARN of the created connection
 
-#### Step 3: Deploy the Master Stack
+##### Step 3: Deploy the Master Stack
+1. Go to AWS Console > CloudFormation > Stacks
+2. Click "Create stack" > "With new resources (standard)"
+3. Select "Amazon S3 URL" and enter the URL to your master.yaml template:
+   `https://s3.amazonaws.com/your-bucket-name/master.yaml`
+4. Click "Next"
+5. Enter stack name: `cicd-pipeline`
+6. Specify parameters:
+   - ProjectName: Name for your project resources
+   - RepositoryName: `cicd-demo`
+   - RepositoryOwner: Your GitHub username
+   - BranchName: `main`
+   - AutoScalingGroupName: Name of your existing Auto Scaling Group
+   - S3TemplateURL: `https://s3.amazonaws.com/your-bucket-name`
+   - CodeStarConnectionArn: ARN of your GitHub connection
+7. Click "Next"
+8. Add any tags if desired and click "Next"
+9. Check "I acknowledge that AWS CloudFormation might create IAM resources"
+10. Click "Create stack"
+
+##### Step 4: Monitor Deployment
+1. On the CloudFormation console, monitor the stack creation progress
+2. Once complete, check the "Outputs" tab for resource names
+3. The pipeline will automatically start once the stack is created
+
+#### Option B: AWS CLI Deployment
+
+##### Step 1: Upload Templates to S3
+```bash
+cd cfn
+./deploy-templates.sh your-template-bucket-name
+```
+
+##### Step 2: Create CodeStar Connection (if not already created)
+1. Go to AWS Console > Developer Tools > Settings > Connections
+2. Click "Create connection"
+3. Select "GitHub" as the provider
+4. Follow the prompts to connect to your GitHub account
+5. Note the ARN of the created connection
+
+##### Step 3: Deploy the Master Stack
 ```bash
 aws cloudformation create-stack \
   --stack-name cicd-pipeline \
@@ -64,7 +106,7 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM
 ```
 
-#### Step 4: Monitor Deployment
+##### Step 4: Monitor Deployment
 1. Go to AWS Console > CloudFormation
 2. Select the `cicd-pipeline` stack
 3. Monitor the "Events" tab for deployment progress
