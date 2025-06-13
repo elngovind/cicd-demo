@@ -585,26 +585,45 @@ Resources:
             # Update system packages
             yum update -y
             
-            # Install CodeDeploy agent
-            yum install -y ruby wget
+            # Install required packages
+            yum install -y ruby wget httpd
+            
+            # Install CodeDeploy agent with proper error handling
             cd /home/ec2-user
             wget https://aws-codedeploy-${AWS::Region}.s3.amazonaws.com/latest/install
             chmod +x ./install
             ./install auto
-            service codedeploy-agent start
+            
+            # Ensure CodeDeploy agent is running
+            service codedeploy-agent status || service codedeploy-agent start
             systemctl enable codedeploy-agent
+            
+            # Verify CodeDeploy agent is running and log status
+            if systemctl is-active codedeploy-agent; then
+              echo "CodeDeploy agent is running successfully"
+            else
+              echo "WARNING: CodeDeploy agent is not running"
+              service codedeploy-agent restart
+            fi
             
             # Install Node.js
             curl -sL https://rpm.nodesource.com/setup_${NodejsVersion} | bash -
             yum install -y nodejs
             
-            # Create application directory
+            # Create application directory with proper permissions
             mkdir -p /var/www/html
             chmod -R 755 /var/www/html
+            
+            # Create empty placeholder files for scripts to prevent failures
+            mkdir -p /opt/codedeploy-agent/deployment-root/deployment-instructions
+            touch /opt/codedeploy-agent/deployment-root/deployment-instructions/deployment-group-id
             
             # Log completion
             mkdir -p /var/log/cloud-init
             echo "Initialization complete with CodeDeploy agent installed" > /var/log/cloud-init/cloud-init.log
+            
+            # Restart CodeDeploy agent one more time to ensure it's running
+            service codedeploy-agent restart
         MetadataOptions:
           HttpTokens: required
           HttpEndpoint: enabled

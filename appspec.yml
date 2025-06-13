@@ -3,7 +3,18 @@ os: linux
 files:
   - source: /
     destination: /var/www/html
+file_exists_behavior: OVERWRITE
+permissions:
+  - object: /var/www/html
+    pattern: "**"
+    owner: root
+    group: root
+    mode: 755
 hooks:
+  ApplicationStop:
+    - location: scripts/stop_application.sh
+      timeout: 60
+      runas: root
   BeforeInstall:
     - location: scripts/before_install.sh
       timeout: 300
@@ -16,7 +27,7 @@ hooks:
     - location: scripts/start_application.sh
       timeout: 300
       runas: root
-  ApplicationStop:
-    - location: scripts/stop_application.sh
+  ValidateService:
+    - location: scripts/validate_service.sh
       timeout: 300
       runas: root
