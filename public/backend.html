@@ -282,22 +282,53 @@
     <script src="js/interactive.js"></script>
     <script src="js/student-data.js"></script>
     <script>
-        // Initialize tabs for backend page
+        // Fix for admin page not loading
         document.addEventListener('DOMContentLoaded', function() {
-            // Make sure tabs are initialized
-            if (typeof initTabs === 'function') {
-                initTabs();
+            console.log("Admin page loading...");
+            
+            // Force initialize tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function() {
+                    console.log("Tab clicked:", this.getAttribute('data-tab'));
+                    
+                    // Remove active class from all tabs
+                    tabs.forEach(t => t.classList.remove('active'));
+                    
+                    // Add active class to clicked tab
+                    this.classList.add('active');
+                    
+                    // Hide all tab contents
+                    const tabContents = document.querySelectorAll('.tab-content');
+                    tabContents.forEach(content => {
+                        content.classList.remove('active');
+                        content.style.display = 'none';
+                    });
+                    
+                    // Show the target tab content
+                    const target = this.getAttribute('data-tab');
+                    if (target && document.getElementById(target)) {
+                        document.getElementById(target).classList.add('active');
+                        document.getElementById(target).style.display = 'block';
+                    }
+                });
+            });
+            
+            // Make sure first tab is active
+            const firstTab = document.querySelector('.tab');
+            if (firstTab) {
+                firstTab.click();
             }
             
-            // Populate student table from student data if available
+            // Populate student table from student data
             if (typeof studentData !== 'undefined') {
                 const studentTable = document.querySelector('#students-tab .backend-table tbody');
                 if (studentTable) {
                     // Clear existing rows
                     studentTable.innerHTML = '';
                     
-                    // Add top 10 students
-                    studentData.slice(0, 10).forEach(student => {
+                    // Add all students
+                    studentData.forEach(student => {
                         const progress = Math.floor(Math.random() * 30) + 70; // Random progress between 70-100%
                         const status = progress > 85 ? 'active' : (progress > 75 ? 'pending' : 'inactive');
                         const statusText = status === 'active' ? 'Active' : (status === 'pending' ? 'On Leave' : 'Inactive');

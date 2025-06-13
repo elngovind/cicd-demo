@@ -148,7 +148,7 @@ function initUserMenu() {
             <ul class="user-dropdown-menu">
                 <li><a href="#"><i class="fas fa-user-circle"></i> My Profile</a></li>
                 <li><a href="#"><i class="fas fa-cog"></i> Account Settings</a></li>
-                <li><a href="#"><i class="fas fa-question-circle"></i> Help Center</a></li>
+                <li><a href="help-center.html"><i class="fas fa-question-circle"></i> Help Center</a></li>
                 <li class="divider"></li>
                 <li><a href="#" class="logout-link"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
             </ul>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center - AWS Cloud Academy</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/lms-styles.css">
+    <link rel="stylesheet" href="css/sns-styles.css">
+    <link rel="stylesheet" href="css/interactive.css">
+    <link rel="stylesheet" href="css/help-center.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container header-container">
+            <div class="logo">
+                <i class="fas fa-cloud"></i>
+                <span>AWS Cloud Academy</span>
+            </div>
+            
+            <ul class="nav-links">
+                <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                <li><a href="backend.html"><i class="fas fa-cog"></i> Admin</a></li>
+                <li><a href="#" class="active"><i class="fas fa-question-circle"></i> Help Center</a></li>
+            </ul>
+            
+            <div class="user-menu">
+                <a href="#" class="btn btn-outline" id="notification-btn">
+                    <i class="fas fa-bell"></i>
+                </a>
+                <div class="user-info">
+                    <span class="user-name">Govind</span>
+                    <div class="user-avatar">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Layout -->
+    <div class="main-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <ul class="sidebar-menu">
+                <li><a href="#getting-started"><i class="fas fa-rocket"></i> Getting Started</a></li>
+                <li><a href="#faq"><i class="fas fa-question-circle"></i> FAQ</a></li>
+                <li><a href="#tutorials"><i class="fas fa-book"></i> Tutorials</a></li>
+                <li><a href="#contact-support"><i class="fas fa-headset"></i> Contact Support</a></li>
+                <li><a href="index.html"><i class="fas fa-arrow-left"></i> Back to Dashboard</a></li>
+            </ul>
+        </aside>
+
+        <!-- Content -->
+        <main class="content">
+            <h1 class="page-title">Help Center</h1>
+            
+            <div class="section" id="getting-started">
+                <h2 class="section-title">
+                    <span><i class="fas fa-rocket"></i> Getting Started</span>
+                </h2>
+                <div class="help-content">
+                    <h3>Welcome to AWS Cloud Academy</h3>
+                    <p>This platform is designed to help you learn AWS cloud services and prepare for AWS certifications. Here's how to get started:</p>
+                    
+                    <ol>
+                        <li><strong>Explore Courses</strong> - Browse through our catalog of AWS courses</li>
+                        <li><strong>Join a Learning Path</strong> - Follow structured learning paths for specific AWS certifications</li>
+                        <li><strong>Practice Labs</strong> - Get hands-on experience with AWS services in our labs</li>
+                        <li><strong>Take Assessments</strong> - Test your knowledge with quizzes and practice exams</li>
+                    </ol>
+                    
+                    <div class="help-card">
+                        <h4><i class="fas fa-lightbulb"></i> Pro Tip</h4>
+                        <p>Start with the AWS Cloud Practitioner course if you're new to AWS, then progress to more specialized certifications.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="faq">
+                <h2 class="section-title">
+                    <span><i class="fas fa-question-circle"></i> Frequently Asked Questions</span>
+                </h2>
+                <div class="help-content">
+                    <div class="faq-item">
+                        <h3>How do I reset my password?</h3>
+                        <p>Click on the "Forgot Password" link on the login page. You'll receive an email with instructions to reset your password.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>How do I track my progress?</h3>
+                        <p>Your progress is automatically tracked in your dashboard. You can see completion percentages for each course and your overall certification path.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>Can I download course materials for offline use?</h3>
+                        <p>Yes, most course materials are available for download as PDFs. Look for the download icon next to each lesson.</p>
+                    </div>
+                    
+                    <div class="faq-item">
+                        <h3>How do I get my AWS certification after completing a course?</h3>
+                        <p>Our courses prepare you for AWS certification exams, but you'll need to schedule and take the official AWS exam separately. We provide links to the AWS Certification portal in each course.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="tutorials">
+                <h2 class="section-title">
+                    <span><i class="fas fa-book"></i> Video Tutorials</span>
+                </h2>
+                <div class="help-content">
+                    <div class="tutorial-grid">
+                        <div class="tutorial-card">
+                            <div class="tutorial-image">
+                                <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZ3JhbW1pbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Tutorial Image">
+                                <div class="play-button"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="tutorial-content">
+                                <h3>Navigating the Learning Dashboard</h3>
+                                <p>Learn how to use the dashboard to track your progress and access courses.</p>
+                            </div>
+                        </div>
+                        
+                        <div class="tutorial-card">
+                            <div class="tutorial-image">
+                                <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGF0YSUyMHNjaWVuY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Tutorial Image">
+                                <div class="play-button"><i class="fas fa-play"></i></div>
+                            </div>
+                            <div class="tutorial-content">
+                                <h3>Using AWS Labs</h3>
+                                <p>How to access and use the hands-on labs for practical experience.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section" id="contact-support">
+                <h2 class="section-title">
+                    <span><i class="fas fa-headset"></i> Contact Support</span>
+                </h2>
+                <div class="help-content">
+                    <p>Need additional help? Our support team is available 24/7.</p>
+                    
+                    <form id="support-form" class="help-form">
+                        <div class="form-group">
+                            <label for="support-name">Your Name</label>
+                            <input type="text" id="support-name" class="form-control" placeholder="Enter your name">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="support-email">Email Address</label>
+                            <input type="email" id="support-email" class="form-control" placeholder="Enter your email">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="support-topic">Topic</label>
+                            <select id="support-topic" class="form-control">
+                                <option value="technical">Technical Issue</option>
+                                <option value="billing">Billing Question</option>
+                                <option value="course">Course Content</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="support-message">Message</label>
+                            <textarea id="support-message" class="form-control" rows="5" placeholder="Describe your issue or question"></textarea>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary">Submit Request</button>
+                    </form>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+    <script src="js/interactive.js"></script>
+    <script>
+        // Initialize help center functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Handle support form submission
+            const supportForm = document.getElementById('support-form');
+            if (supportForm) {
+                supportForm.addEventListener('submit', function(e) {
+                    e.preventDefault();
+                    alert('Your support request has been submitted. We will respond within 24 hours.');
+                    this.reset();
+                });
+            }
+            
+            // Smooth scroll for sidebar links
+            const sidebarLinks = document.querySelectorAll('.sidebar-menu a[href^="#"]');
+            sidebarLinks.forEach(link => {
+                link.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    
+                    // Remove active class from all links
+                    sidebarLinks.forEach(l => l.classList.remove('active'));
+                    
+                    // Add active class to clicked link
+                    this.classList.add('active');
+                    
+                    // Scroll to section
+                    const targetId = this.getAttribute('href');
+                    const targetSection = document.querySelector(targetId);
+                    
+                    if (targetSection) {
+                        window.scrollTo({
+                            top: targetSection.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            });
+            
+            // Add click handler for tutorial videos
+            const playButtons = document.querySelectorAll('.play-button');
+            playButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    alert('Video tutorial will play here. This is a placeholder for the actual video player.');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,140 @@
+/* Help Center Styles */
+
+.help-content {
+  margin-bottom: 2rem;
+}
+
+.help-content h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  color: var(--primary);
+}
+
+.help-content p {
+  margin-bottom: 1rem;
+  line-height: 1.6;
+}
+
+.help-content ol, 
+.help-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.help-content li {
+  margin-bottom: 0.5rem;
+}
+
+.help-card {
+  background-color: rgba(0, 102, 204, 0.05);
+  border-left: 4px solid var(--primary);
+  padding: 1rem;
+  margin: 1.5rem 0;
+  border-radius: 4px;
+}
+
+.help-card h4 {
+  font-size: 1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+}
+
+.help-card h4 i {
+  margin-right: 0.5rem;
+}
+
+.faq-item {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 1px solid var(--gray-light);
+}
+
+.faq-item:last-child {
+  border-bottom: none;
+}
+
+.faq-item h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--dark);
+}
+
+.tutorial-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.tutorial-card {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border: 1px solid var(--gray-light);
+}
+
+.tutorial-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.tutorial-image {
+  position: relative;
+  height: 180px;
+  overflow: hidden;
+}
+
+.tutorial-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.play-button {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.play-button:hover {
+  background-color: var(--primary);
+  transform: translate(-50%, -50%) scale(1.1);
+}
+
+.tutorial-content {
+  padding: 1rem;
+}
+
+.tutorial-content h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.help-form {
+  max-width: 600px;
+}
+
+@media (max-width: 768px) {
+  .tutorial-grid {
+    grid-template-columns: 1fr;
+  }
+}
