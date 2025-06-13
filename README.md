@@ -40,12 +40,22 @@ The CI/CD pipeline uses the following AWS services:
 
 #### Option A: AWS Console Deployment
 
-##### Step 1: Create S3 Bucket for Templates
+##### Step 1: Deploy the Core Infrastructure Template
+1. Go to AWS Console > CloudFormation > Stacks
+2. Click "Create stack" > "With new resources (standard)"
+3. Select "Upload a template file" and upload the `cfn/template-bucket.yaml` file
+4. Click "Next"
+5. Enter stack name: `template-bucket-stack`
+6. Specify parameters:
+   - BucketName: A globally unique name for your template bucket
+7. Click "Next", then "Next" again
+8. Click "Create stack"
+9. Wait for the stack to complete and note the bucket name from the Outputs tab
+
+##### Step 2: Upload Templates to S3
 1. Go to AWS Console > S3
-2. Click "Create bucket"
-3. Enter a unique bucket name and select your region
-4. Keep default settings and click "Create bucket"
-5. Upload all CloudFormation templates from the `cfn/` directory to this bucket
+2. Find the bucket created in Step 1
+3. Upload all CloudFormation templates from the `cfn/` directory to this bucket
 
 ##### Step 2: Create CodeStar Connection
 1. Go to AWS Console > Developer Tools > Settings > Connections
@@ -81,7 +91,20 @@ The CI/CD pipeline uses the following AWS services:
 
 #### Option B: AWS CLI Deployment
 
-##### Step 1: Upload Templates to S3
+##### Step 1: Deploy the Core Infrastructure Template
+```bash
+aws cloudformation create-stack \
+  --stack-name template-bucket-stack \
+  --template-body file://cfn/template-bucket.yaml \
+  --parameters ParameterKey=BucketName,ParameterValue=your-unique-template-bucket-name
+```
+
+Wait for the stack to complete:
+```bash
+aws cloudformation wait stack-create-complete --stack-name template-bucket-stack
+```
+
+##### Step 2: Upload Templates to S3
 ```bash
 cd cfn
 ./deploy-templates.sh your-template-bucket-name

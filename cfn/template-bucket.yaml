@@ -1,0 +1,42 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'The Core Infra Deployment Template'
+
+Parameters:
+  BucketName:
+    Type: String
+    Description: Name of the S3 bucket for CloudFormation templates (must be globally unique)
+
+Resources:
+  TemplateBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref BucketName
+      VersioningConfiguration:
+        Status: Enabled
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+      PublicAccessBlockConfiguration:
+        BlockPublicAcls: true
+        BlockPublicPolicy: true
+        IgnorePublicAcls: true
+        RestrictPublicBuckets: true
+      Tags:
+        - Key: Environment
+          Value: Production
+        - Key: CreatedDate
+          Value: "2025-03-15"
+
+Outputs:
+  TemplateBucketName:
+    Description: Name of the S3 bucket for CloudFormation templates
+    Value: !Ref TemplateBucket
+    Export:
+      Name: !Sub ${AWS::StackName}-TemplateBucketName
+
+  TemplateBucketURL:
+    Description: URL of the S3 bucket for CloudFormation templates
+    Value: !Sub https://${TemplateBucket}.s3.${AWS::Region}.amazonaws.com
+    Export:
+      Name: !Sub ${AWS::StackName}-TemplateBucketURL
