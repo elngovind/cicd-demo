@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/lms-styles.css">
+    <link rel="stylesheet" href="css/sns-styles.css">
 </head>
 <body>
     <!-- Header -->
@@ -26,9 +27,26 @@
             </ul>
             
             <div class="user-menu">
-                <a href="#" class="btn btn-outline">
+                <!-- SNS Notification Button -->
+                <a href="#" class="btn btn-outline" id="notification-btn">
                     <i class="fas fa-bell"></i>
+                    <span class="notification-badge" id="notification-badge">0</span>
                 </a>
+                
+                <!-- SNS Notification Dropdown -->
+                <div class="notification-dropdown" id="notification-dropdown">
+                    <div class="notification-header">
+                        <h3>Notifications</h3>
+                        <button class="mark-all-read">Mark all as read</button>
+                    </div>
+                    <div class="notification-list" id="notification-list">
+                        <!-- Notifications will be added here dynamically -->
+                    </div>
+                    <div class="notification-footer">
+                        <a href="#">View all notifications</a>
+                    </div>
+                </div>
+                
                 <div class="user-avatar">
                     <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User Avatar">
                 </div>
@@ -54,7 +72,7 @@
 
         <!-- Content -->
         <main class="content">
-            <h1 class="page-title">Dashboard</h1>
+            <h1 class="page-title">Welcome to Govind's AWS Cloud Architecture Course</h1>
             
             <!-- Stats Cards -->
             <div class="stats-grid">
@@ -111,6 +129,35 @@
                 </div>
             </div>
             
+            <!-- SNS Demo Section -->
+            <div class="sns-demo-section">
+                <h2 class="sns-demo-title">
+                    <i class="fas fa-cloud"></i> AWS SNS Notification Demo
+                </h2>
+                <p>This is a live demonstration of AWS Simple Notification Service (SNS) pattern. Send a notification below to see it in action.</p>
+                
+                <form id="sns-demo-controls" class="sns-demo-form">
+                    <div class="sns-form-group">
+                        <label for="sns-topic">Notification Type</label>
+                        <select id="sns-topic" required>
+                            <option value="announcement">Announcement</option>
+                            <option value="assignment">Assignment</option>
+                            <option value="grade">Grade Update</option>
+                            <option value="message">Message</option>
+                        </select>
+                    </div>
+                    
+                    <div class="sns-form-group">
+                        <label for="sns-message">Notification Message</label>
+                        <input type="text" id="sns-message" placeholder="Enter your notification message" required>
+                    </div>
+                    
+                    <div class="sns-form-submit">
+                        <button type="submit" class="btn btn-primary">Publish Notification</button>
+                    </div>
+                </form>
+            </div>
+            
             <!-- Courses Section -->
             <div class="section-title">
                 <h2>My Courses</h2>
@@ -123,16 +170,16 @@
                         <img src="https://images.unsplash.com/photo-1516116216624-53e697fedbea?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8NXx8cHJvZ3JhbW1pbmd8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Course Image">
                     </div>
                     <div class="course-content">
-                        <div class="course-category">Programming</div>
-                        <h3 class="course-title">Advanced JavaScript for Web Development</h3>
+                        <div class="course-category">AWS</div>
+                        <h3 class="course-title">AWS Cloud Architecture Fundamentals</h3>
                         <div class="course-instructor">
-                            <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="Instructor">
-                            <span>Sarah Johnson</span>
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                            <span>Govind (Instructor)</span>
                         </div>
                         <div class="course-footer">
                             <div class="course-rating">
                                 <i class="fas fa-star"></i>
-                                <span>4.8</span>
+                                <span>4.9</span>
                             </div>
                             <div class="course-students">
                                 <i class="fas fa-user"></i>
@@ -147,20 +194,20 @@
                         <img src="https://images.unsplash.com/photo-1551288049-bebda4e38f71?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8ZGF0YSUyMHNjaWVuY2V8ZW58MHx8MHx8fDA%3D&auto=format&fit=crop&w=500&q=60" alt="Course Image">
                     </div>
                     <div class="course-content">
-                        <div class="course-category">Data Science</div>
-                        <h3 class="course-title">Machine Learning Fundamentals</h3>
+                        <div class="course-category">DevOps</div>
+                        <h3 class="course-title">CI/CD Pipeline Implementation</h3>
                         <div class="course-instructor">
                             <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
-                            <span>Michael Chen</span>
+                            <span>Govind (Instructor)</span>
                         </div>
                         <div class="course-footer">
                             <div class="course-rating">
                                 <i class="fas fa-star"></i>
-                                <span>4.9</span>
+                                <span>4.8</span>
                             </div>
                             <div class="course-students">
                                 <i class="fas fa-user"></i>
-                                <span>2,350 students</span>
+                                <span>950 students</span>
                             </div>
                         </div>
                     </div>
@@ -171,11 +218,11 @@
                         <img src="https://images.unsplash.com/photo-1558346490-a72e53ae2d4f?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Nnx8ZGVzaWdufGVufDB8fDB8fHww&auto=format&fit=crop&w=500&q=60" alt="Course Image">
                     </div>
                     <div class="course-content">
-                        <div class="course-category">Design</div>
-                        <h3 class="course-title">UI/UX Design Principles</h3>
+                        <div class="course-category">Cloud Security</div>
+                        <h3 class="course-title">AWS Security Best Practices</h3>
                         <div class="course-instructor">
-                            <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Instructor">
-                            <span>Emily Rodriguez</span>
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Instructor">
+                            <span>Govind (Instructor)</span>
                         </div>
                         <div class="course-footer">
                             <div class="course-rating">
@@ -184,7 +231,7 @@
                             </div>
                             <div class="course-students">
                                 <i class="fas fa-user"></i>
-                                <span>1,840 students</span>
+                                <span>820 students</span>
                             </div>
                         </div>
                     </div>
@@ -204,7 +251,7 @@
                         <div class="event-month">Jun</div>
                     </div>
                     <div class="event-content">
-                        <h3 class="event-title">JavaScript Workshop</h3>
+                        <h3 class="event-title">AWS Lambda Workshop with Govind</h3>
                         <div class="event-info">
                             <span class="event-time"><i class="fas fa-clock"></i> 10:00 AM - 12:00 PM</span>
                             <span class="event-location"><i class="fas fa-map-marker-alt"></i> Online</span>
@@ -218,7 +265,7 @@
                         <div class="event-month">Jun</div>
                     </div>
                     <div class="event-content">
-                        <h3 class="event-title">Data Science Project Submission</h3>
+                        <h3 class="event-title">Cloud Architecture Project Submission</h3>
                         <div class="event-info">
                             <span class="event-time"><i class="fas fa-clock"></i> 11:59 PM</span>
                             <span class="event-location"><i class="fas fa-map-marker-alt"></i> Online</span>
@@ -232,7 +279,7 @@
                         <div class="event-month">Jun</div>
                     </div>
                     <div class="event-content">
-                        <h3 class="event-title">UI/UX Design Review Session</h3>
+                        <h3 class="event-title">AWS Certification Prep Session</h3>
                         <div class="event-info">
                             <span class="event-time"><i class="fas fa-clock"></i> 2:00 PM - 4:00 PM</span>
                             <span class="event-location"><i class="fas fa-map-marker-alt"></i> Room 302</span>
@@ -243,6 +290,7 @@
         </main>
     </div>
 
+    <script src="js/sns-demo.js"></script>
     <script>
         // Simple script to handle mobile sidebar toggle
         document.addEventListener('DOMContentLoaded', function() {
@@ -268,6 +316,20 @@
                     el.style.transform = 'translateY(0)';
                 }, 100 * (index + 1));
             });
+            
+            // Mark all notifications as read
+            const markAllReadBtn = document.querySelector('.mark-all-read');
+            if (markAllReadBtn) {
+                markAllReadBtn.addEventListener('click', function() {
+                    const unreadItems = document.querySelectorAll('.notification-item.unread');
+                    unreadItems.forEach(item => {
+                        item.classList.remove('unread');
+                        if (window.SNS) {
+                            window.SNS.markAsRead(parseInt(item.dataset.id));
+                        }
+                    });
+                });
+            }
         });
     </script>
 </body>
