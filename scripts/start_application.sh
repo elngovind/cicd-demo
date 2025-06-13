@@ -13,67 +13,60 @@ const path = require('path');
 const port = 80;
 
 const server = http.createServer((req, res) => {
-  // Serve index.html for root path
-  if (req.url === '/' || req.url === '/index.html') {
-    fs.readFile(path.join(__dirname, 'index.html'), (err, data) => {
-      if (err) {
-        res.statusCode = 500;
-        res.end('Error loading index.html');
-        return;
+  // Default to index.html
+  let filePath = path.join(__dirname, req.url === '/' ? 'index.html' : req.url);
+  
+  // Get the file extension
+  const extname = String(path.extname(filePath)).toLowerCase();
+  
+  // MIME types
+  const mimeTypes = {
+    '.html': 'text/html',
+    '.js': 'text/javascript',
+    '.css': 'text/css',
+    '.json': 'application/json',
+    '.png': 'image/png',
+    '.jpg': 'image/jpg',
+    '.jpeg': 'image/jpeg',
+    '.gif': 'image/gif',
+    '.svg': 'image/svg+xml',
+    '.wav': 'audio/wav',
+    '.mp4': 'video/mp4',
+    '.woff': 'application/font-woff',
+    '.ttf': 'application/font-ttf',
+    '.eot': 'application/vnd.ms-fontobject',
+    '.otf': 'application/font-otf',
+    '.wasm': 'application/wasm'
+  };
+
+  // Set content type based on file extension
+  const contentType = mimeTypes[extname] || 'application/octet-stream';
+
+  // Read file
+  fs.readFile(filePath, (error, content) => {
+    if (error) {
+      if (error.code === 'ENOENT') {
+        // Page not found
+        fs.readFile(path.join(__dirname, 'index.html'), (err, content) => {
+          if (err) {
+            res.writeHead(500);
+            res.end('Error loading index.html');
+            return;
+          }
+          res.writeHead(200, { 'Content-Type': 'text/html' });
+          res.end(content, 'utf-8');
+        });
+      } else {
+        // Server error
+        res.writeHead(500);
+        res.end(`Server Error: ${error.code}`);
       }
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/html');
-      res.end(data);
-    });
-  } 
-  // Serve CSS files
-  else if (req.url.match(/\.css$/)) {
-    const cssPath = path.join(__dirname, req.url);
-    fs.readFile(cssPath, (err, data) => {
-      if (err) {
-        res.statusCode = 404;
-        res.end('Not found');
-        return;
-      }
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'text/css');
-      res.end(data);
-    });
-  }
-  // Serve image files
-  else if (req.url.match(/\.(jpg|jpeg|png|gif|svg)$/)) {
-    const imgPath = path.join(__dirname, req.url);
-    fs.readFile(imgPath, (err, data) => {
-      if (err) {
-        res.statusCode = 404;
-        res.end('Not found');
-        return;
-      }
-      res.statusCode = 200;
-      const ext = path.extname(req.url).substring(1);
-      res.setHeader('Content-Type', `image/${ext}`);
-      res.end(data);
-    });
-  }
-  // Serve JavaScript files
-  else if (req.url.match(/\.js$/)) {
-    const jsPath = path.join(__dirname, req.url);
-    fs.readFile(jsPath, (err, data) => {
-      if (err) {
-        res.statusCode = 404;
-        res.end('Not found');
-        return;
-      }
-      res.statusCode = 200;
-      res.setHeader('Content-Type', 'application/javascript');
-      res.end(data);
-    });
-  }
-  // Handle 404 for all other requests
-  else {
-    res.statusCode = 404;
-    res.end('Not found');
-  }
+    } else {
+      // Success
+      res.writeHead(200, { 'Content-Type': contentType });
+      res.end(content, 'utf-8');
+    }
+  });
 });
 
 // Need to run as root to bind to port 80
@@ -81,6 +74,12 @@ server.listen(port, () => {
   console.log(`Server running on port ${port}`);
 });
 EOF
+
+# Copy public directory to /var/www/html if it exists
+if [ -d "/var/www/html/public" ]; then
+  echo "Copying public directory contents to /var/www/html"
+  cp -r /var/www/html/public/* /var/www/html/
+fi
 
 # Install PM2 globally
 echo "Installing PM2..."
