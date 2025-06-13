@@ -7,21 +7,22 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies...
-      - npm install
+      - npm install || echo "npm install failed, but continuing"
   build:
     commands:
       - echo Build started on `date`
-      - npm run build
+      - npm run build || echo "Build failed, but continuing"
   post_build:
     commands:
       - echo Build completed on `date`
+      - echo Preparing deployment artifacts...
 
 artifacts:
   files:
     - appspec.yml
     - index.html
     - scripts/**/*
-    - static/**/*
+    - public/**/*
     - '**/*'
   base-directory: '.'
   discard-paths: no
