@@ -10,6 +10,7 @@ The CI/CD pipeline uses the following AWS services:
 - AWS CodeDeploy - Deploys the application to EC2 instances
 - Amazon S3 - Stores artifacts and templates
 - AWS IAM - Manages permissions and roles
+- AWS Systems Manager - Manages CodeDeploy agent installation
 
 ## Repository Structure
 
@@ -29,6 +30,47 @@ The CI/CD pipeline uses the following AWS services:
 ├── appspec.yml         # Application specification for CodeDeploy
 └── index.html          # Sample web application
 ```
+
+## CodeDeploy Agent Installation
+
+The CodeDeploy agent must be installed on all EC2 instances in your Auto Scaling Group. We recommend using AWS Systems Manager Distributor for this purpose:
+
+1. Ensure your instances have the SSM Agent installed (included by default in Amazon Linux 2)
+2. Attach an IAM role with the `AmazonSSMManagedInstanceCore` policy to your instances
+3. Install the CodeDeploy agent using one of these methods:
+
+### Option A: One-time installation via AWS Console
+1. Go to AWS Console > Systems Manager > Distributor
+2. Select "AWSCodeDeployAgent" from the list of packages
+3. Click "Install one time"
+4. Select your instances or target by tags
+5. Click "Install"
+
+### Option B: Automated installation via AWS CLI
+```bash
+# Install on specific instances
+aws ssm send-command \
+  --document-name "AWS-ConfigureAWSPackage" \
+  --parameters "action=Install,name=AWSCodeDeployAgent" \
+  --targets "Key=instanceids,Values=i-1234567890abcdef0,i-0598c7d356eba48d7"
+
+# Install on instances with specific tags
+aws ssm send-command \
+  --document-name "AWS-ConfigureAWSPackage" \
+  --parameters "action=Install,name=AWSCodeDeployAgent" \
+  --targets "Key=tag:Name,Values=MyWebServer"
+```
+
+### Option C: Automated installation via State Manager Association
+```bash
+aws ssm create-association \
+  --name "AWS-ConfigureAWSPackage" \
+  --parameters "action=Install,name=AWSCodeDeployAgent" \
+  --targets "Key=tag:Name,Values=MyWebServer" \
+  --schedule-expression "cron(0 2 ? * SUN *)"
+```
+
+This creates an association that will install and maintain the CodeDeploy agent on all instances with the tag "Name=MyWebServer", running weekly on Sundays at 2:00 AM.
 
 ## Deployment Instructions
 
@@ -57,7 +99,7 @@ The CI/CD pipeline uses the following AWS services:
 2. Find the bucket created in Step 1
 3. Upload all CloudFormation templates from the `cfn/` directory to this bucket
 
-##### Step 2: Create CodeStar Connection
+##### Step 3: Create CodeStar Connection
 1. Go to AWS Console > Developer Tools > Settings > Connections
 2. Click "Create connection"
 3. Select "GitHub" as the provider
@@ -74,7 +116,7 @@ The CI/CD pipeline uses the following AWS services:
 
 For more detailed instructions, see [CODESTAR_CONNECTION.md](CODESTAR_CONNECTION.md)
 
-##### Step 3: Deploy the Master Stack
+##### Step 4: Deploy the Master Stack
 1. Go to AWS Console > CloudFormation > Stacks
 2. Click "Create stack" > "With new resources (standard)"
 3. Select "Amazon S3 URL" and enter the URL to your master.yaml template:
@@ -94,7 +136,10 @@ For more detailed instructions, see [CODESTAR_CONNECTION.md](CODESTAR_CONNECTION
 9. Check "I acknowledge that AWS CloudFormation might create IAM resources"
 10. Click "Create stack"
 
-##### Step 4: Monitor Deployment
+##### Step 5: Install CodeDeploy Agent
+Follow the CodeDeploy Agent Installation instructions above to install the agent on your EC2 instances.
+
+##### Step 6: Monitor Deployment
 1. On the CloudFormation console, monitor the stack creation progress
 2. Once complete, check the "Outputs" tab for resource names
 3. The pipeline will automatically start once the stack is created
@@ -120,7 +165,7 @@ cd cfn
 ./deploy-templates.sh your-template-bucket-name
 ```
 
-##### Step 2: Create CodeStar Connection (if not already created)
+##### Step 3: Create CodeStar Connection (if not already created)
 ```bash
 # Create the connection (status will be PENDING)
 aws codestar-connections create-connection \
@@ -143,7 +188,7 @@ aws codestar-connections list-connections \
 
 For more detailed instructions, see [CODESTAR_CONNECTION.md](CODESTAR_CONNECTION.md)
 
-##### Step 3: Deploy the Master Stack
+##### Step 4: Deploy the Master Stack
 ```bash
 aws cloudformation create-stack \
   --stack-name cicd-pipeline \
@@ -155,7 +200,10 @@ aws cloudformation create-stack \
   --capabilities CAPABILITY_IAM
 ```
 
-##### Step 4: Monitor Deployment
+##### Step 5: Install CodeDeploy Agent
+Install the CodeDeploy agent on your EC2 instances using Systems Manager as described in the CodeDeploy Agent Installation section.
+
+##### Step 6: Monitor Deployment
 1. Go to AWS Console > CloudFormation
 2. Select the `cicd-pipeline` stack
 3. Monitor the "Events" tab for deployment progress
@@ -201,7 +249,10 @@ aws deploy create-deployment-group \
   --service-role-arn your-codedeploy-service-role-arn
 ```
 
-#### Step 5: Create CodePipeline
+#### Step 5: Install CodeDeploy Agent
+Install the CodeDeploy agent on your EC2 instances using Systems Manager as described in the CodeDeploy Agent Installation section.
+
+#### Step 6: Create CodePipeline
 ```bash
 aws codepipeline create-pipeline \
   --pipeline-name your-pipeline-name \
@@ -232,3 +283,10 @@ aws codepipeline create-pipeline \
 - Verify IAM roles have the necessary permissions
 - Ensure the Auto Scaling Group exists and has running instances
 - Validate that the CodeStar Connection is properly configured
+- Verify the CodeDeploy agent is installed and running on your instances:
+  ```bash
+  aws ssm send-command \
+    --document-name "AWS-RunShellScript" \
+    --parameters "commands=['service codedeploy-agent status']" \
+    --targets "Key=instanceids,Values=i-1234567890abcdef0"
+  ```
