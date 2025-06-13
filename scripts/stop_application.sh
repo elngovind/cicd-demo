@@ -1,22 +1,24 @@
 #!/bin/bash
 
-# Check if httpd is running and stop it if it is
-if systemctl is-active httpd &>/dev/null; then
-  echo "Stopping httpd service..."
-  systemctl stop httpd
-  echo "httpd service stopped"
-else
-  echo "httpd service is not running"
-fi
+# Ubuntu-specific stop script
+echo "Running Ubuntu-specific stop script"
 
-# Check if Node.js application is running and stop it
-if pgrep -f "node app.js" > /dev/null; then
-  echo "Stopping Node.js application..."
-  pkill -f "node app.js"
+# Stop Node.js application if PM2 is installed
+if command -v pm2 &> /dev/null; then
+  echo "Stopping Node.js application with PM2..."
+  pm2 stop app 2>/dev/null || true
   echo "Node.js application stopped"
 else
-  echo "Node.js application is not running"
+  echo "PM2 not installed, checking for running Node.js processes"
+  # Check if Node.js application is running and stop it
+  if pgrep -f "node app.js" > /dev/null; then
+    echo "Stopping Node.js application..."
+    pkill -f "node app.js" || true
+    echo "Node.js application stopped"
+  else
+    echo "No running Node.js application found"
+  fi
 fi
 
-# Always exit with success to prevent deployment failures
+# Always exit with success
 exit 0
