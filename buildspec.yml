@@ -7,7 +7,6 @@ phases:
   pre_build:
     commands:
       - echo Installing dependencies...
-      - cd WebApp
       - npm install
   build:
     commands:
@@ -16,10 +15,6 @@ phases:
   post_build:
     commands:
       - echo Build completed on `date`
-      - cd ..
-      - cp -r WebApp/build/* .
-      - cp WebApp/appspec.yml .
-      - cp -r WebApp/scripts .
 
 artifacts:
   files:

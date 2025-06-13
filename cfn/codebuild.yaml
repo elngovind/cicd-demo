@@ -51,7 +51,7 @@ Resources:
       Source:
         Type: GITHUB
         Location: !Sub https://github.com/${RepositoryOwner}/${RepositoryName}.git
-        BuildSpec: WebApp/buildspec.yml
+        BuildSpec: buildspec.yml
         GitCloneDepth: 1
         ReportBuildStatus: true
         Auth:
