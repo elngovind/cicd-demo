@@ -3,37 +3,30 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      nodejs: 20
-    commands:
-      - echo Installing dependencies...
-      - npm install
-  
+      nodejs: 18
   pre_build:
     commands:
-      - echo Running tests...
-      - npm test || echo "No tests found, continuing build"
-  
+      - echo Installing dependencies...
+      - cd WebApp
+      - npm install
   build:
     commands:
       - echo Build started on `date`
-      - npm run build || echo "No build script found, continuing"
-  
+      - npm run build
   post_build:
     commands:
       - echo Build completed on `date`
+      - cd ..
+      - cp -r WebApp/build/* .
+      - cp WebApp/appspec.yml .
+      - cp -r WebApp/scripts .
 
 artifacts:
   files:
     - appspec.yml
-    - package.json
-    - package-lock.json
-    - app.js
+    - index.html
     - scripts/**/*
-    - public/**/*
-    - node_modules/**/*
-  discard-paths: no
+    - static/**/*
+    - '**/*'
   base-directory: '.'
-
-cache:
-  paths:
-    - 'node_modules/**/*'
+  discard-paths: no

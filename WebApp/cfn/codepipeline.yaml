@@ -21,6 +21,10 @@ Parameters:
     Type: String
     Default: main
     Description: Branch to build from
+    
+  CodeStarConnectionArn:
+    Type: String
+    Description: ARN of the CodeStar Connection to GitHub
   
   ArtifactBucketName:
     Type: String
@@ -57,15 +61,13 @@ Resources:
             - Name: Source
               ActionTypeId:
                 Category: Source
-                Owner: ThirdParty
-                Provider: GitHub
+                Owner: AWS
+                Provider: CodeStarSourceConnection
                 Version: '1'
               Configuration:
-                Owner: !Ref RepositoryOwner
-                Repo: !Ref RepositoryName
-                Branch: !Ref BranchName
-                OAuthToken: '{{resolve:secretsmanager:GitHubToken:SecretString:token}}'
-                PollForSourceChanges: false
+                ConnectionArn: !Ref CodeStarConnectionArn
+                FullRepositoryId: !Sub "${RepositoryOwner}/${RepositoryName}"
+                BranchName: !Ref BranchName
               OutputArtifacts:
                 - Name: SourceCode
         
@@ -110,3 +112,9 @@ Outputs:
     Value: !Ref CodePipeline
     Export:
       Name: !Sub ${AWS::StackName}-CodePipelineName
+  
+  CodeStarConnectionArnOutput:
+    Description: ARN of the CodeStar Connection used by the pipeline
+    Value: !Ref CodeStarConnectionArn
+    Export:
+      Name: !Sub ${AWS::StackName}-CodeStarConnectionArn

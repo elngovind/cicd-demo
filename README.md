@@ -1,80 +1,59 @@
-# CI/CD Demo for Modern Web Applications (2025)
+# CI/CD Pipeline Demo
 
-This repository contains a complete CI/CD pipeline for deploying modern web applications to AWS. It includes CloudFormation templates for setting up the entire infrastructure and deployment pipeline.
+This repository contains a simple web application and CloudFormation templates to set up a complete CI/CD pipeline using AWS services.
 
-## Repository Structure
+## Architecture
+
+The CI/CD pipeline uses the following AWS services:
+- AWS CodePipeline
+- AWS CodeBuild
+- AWS CodeDeploy
+- Amazon S3
+- AWS IAM
+
+## Directory Structure
 
 ```
 .
-└── WebApp/                 # Web application project
-    ├── app.js              # Main application file
-    ├── appspec.yml         # AWS CodeDeploy configuration
-    ├── buildspec.yml       # AWS CodeBuild configuration
-    ├── package.json        # Node.js package configuration
-    ├── cfn/                # CloudFormation templates
-    │   ├── codebuild.yaml  # CodeBuild project template
-    │   ├── codedeploy.yaml # CodeDeploy application and deployment group template
-    │   ├── codepipeline.yaml # CodePipeline template
-    │   ├── iam-roles.yaml  # IAM roles for CI/CD services
-    │   ├── master.yaml     # Master template that orchestrates all others
-    │   └── s3-bucket.yaml  # S3 bucket for artifacts
-    ├── scripts/            # Deployment scripts
-    │   ├── beforeInstall.sh # Script to run before installation
-    │   ├── install_dependencies.sh # Script to install dependencies
-    │   ├── start_server.sh # Script to start the application
-    │   ├── stop_server.sh  # Script to stop the application
-    │   └── validate_service.sh # Script to validate the deployment
-    └── setup-ubuntu.sh     # Manual setup script for Ubuntu instances
+├── WebApp/
+│   ├── buildspec.yml       # Build specification for CodeBuild
+│   ├── appspec.yml         # Application specification for CodeDeploy
+│   ├── index.html          # Sample web application
+│   ├── scripts/            # Deployment scripts for CodeDeploy
+│   └── cfn/                # CloudFormation templates
+│       ├── master.yaml     # Master template that orchestrates all resources
+│       ├── s3-bucket.yaml  # S3 bucket for artifacts
+│       ├── iam-roles.yaml  # IAM roles for CI/CD services
+│       ├── codebuild.yaml  # CodeBuild project
+│       ├── codedeploy.yaml # CodeDeploy application and deployment group
+│       ├── codepipeline.yaml # CodePipeline configuration
+│       └── deploy-templates.sh # Script to deploy templates to S3
 ```
 
-## Quick Start
+## Deployment Instructions
 
-For detailed instructions, see the [WebApp README](WebApp/README.md).
+1. Upload the CloudFormation templates to an S3 bucket:
 
-### Deploy the CI/CD Pipeline
-
-#### Using AWS CLI
-
-1. Create a GitHub Personal Access Token
-2. Store the token in AWS Secrets Manager as `GitHubToken`
-3. Deploy the master CloudFormation template:
-   ```
-   aws cloudformation create-stack \
-     --stack-name webapp-cicd \
-     --template-body file://WebApp/cfn/master.yaml \
-     --parameters \
-       ParameterKey=ProjectName,ParameterValue=webapp \
-       ParameterKey=RepositoryName,ParameterValue=cicd-demo \
-       ParameterKey=RepositoryOwner,ParameterValue=elngovind \
-       ParameterKey=BranchName,ParameterValue=main \
-       ParameterKey=AutoScalingGroupName,ParameterValue=your-asg-name \
-     --capabilities CAPABILITY_IAM
-   ```
-
-#### Using AWS Console
-
-For step-by-step instructions on deploying through the AWS Management Console, see the [Console Deployment Guide](WebApp/CONSOLE_DEPLOYMENT.md).
-
-### Manual Instance Setup
-
-For Ubuntu instances:
 ```bash
-sudo bash WebApp/setup-ubuntu.sh
+cd WebApp/cfn
+./deploy-templates.sh your-bucket-name
 ```
 
-For Amazon Linux instances:
+2. Deploy the master CloudFormation stack:
+
 ```bash
-sudo bash WebApp/setup-amazon-linux.sh
+aws cloudformation create-stack \
+  --stack-name cicd-pipeline \
+  --template-url https://s3.amazonaws.com/your-bucket-name/master.yaml \
+  --parameters \
+    ParameterKey=S3TemplateURL,ParameterValue=https://s3.amazonaws.com/your-bucket-name \
+    ParameterKey=AutoScalingGroupName,ParameterValue=your-asg-name \
+    ParameterKey=CodeStarConnectionArn,ParameterValue=your-codestar-connection-arn \
+  --capabilities CAPABILITY_IAM
 ```
 
-## Features
+## Prerequisites
 
-- **Complete CI/CD Pipeline**: Source, Build, Deploy stages
-- **Infrastructure as Code**: All resources defined in CloudFormation
-- **Cross-Platform Support**: Works on both Ubuntu and Amazon Linux
-- **Modern Web Stack**: Node.js with Express, PM2, and Nginx
-- **Secure by Default**: IAM roles with least privilege, encrypted S3 buckets
-
-## License
-
-This project is licensed under the ISC License - see the LICENSE file for details.
+- AWS CLI configured with appropriate permissions
+- An Auto Scaling Group for deployment targets
+- A CodeStar Connection to GitHub

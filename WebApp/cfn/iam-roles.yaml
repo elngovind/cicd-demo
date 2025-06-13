@@ -97,6 +97,7 @@ Resources:
               - 's3:GetObjectVersion'
               - 's3:GetBucketVersioning'
               - 's3:PutObject'
+              - 's3:ListBucket'
             Resource:
               - !Sub 'arn:aws:s3:::${ArtifactBucket}/*'
               - !Sub 'arn:aws:s3:::${ArtifactBucket}'
@@ -112,6 +113,10 @@ Resources:
               - 'codedeploy:GetDeploymentConfig'
               - 'codedeploy:GetApplicationRevision'
               - 'codedeploy:RegisterApplicationRevision'
+            Resource: '*'
+          - Effect: Allow
+            Action:
+              - 'codestar-connections:UseConnection'
             Resource: '*'
       Roles:
         - !Ref CodePipelineServiceRole

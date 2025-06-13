@@ -25,12 +25,20 @@ Parameters:
   AutoScalingGroupName:
     Type: String
     Description: Name of the Auto Scaling group to deploy to
+    
+  S3TemplateURL:
+    Type: String
+    Description: S3 URL prefix for CloudFormation templates (e.g., https://s3.amazonaws.com/bucket-name)
+    
+  CodeStarConnectionArn:
+    Type: String
+    Description: ARN of the CodeStar Connection to GitHub
 
 Resources:
   S3BucketStack:
     Type: AWS::CloudFormation::Stack
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/s3-bucket.yaml
+      TemplateURL: !Sub ${S3TemplateURL}/s3-bucket.yaml
       Parameters:
         BucketName: !Sub ${ProjectName}-artifacts-${AWS::AccountId}-${AWS::Region}
       Tags:
@@ -43,7 +51,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: S3BucketStack
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/iam-roles.yaml
+      TemplateURL: !Sub ${S3TemplateURL}/iam-roles.yaml
       Parameters:
         ArtifactBucket: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
       Tags:
@@ -56,7 +64,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codebuild.yaml
+      TemplateURL: !Sub ${S3TemplateURL}/codebuild.yaml
       Parameters:
         ProjectName: !Sub ${ProjectName}-build
         RepositoryName: !Ref RepositoryName
@@ -74,7 +82,7 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: IAMRolesStack
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codedeploy.yaml
+      TemplateURL: !Sub ${S3TemplateURL}/codedeploy.yaml
       Parameters:
         ApplicationName: !Sub ${ProjectName}-deploy
         DeploymentGroupName: !Sub ${ProjectName}-deploy-group
@@ -90,12 +98,13 @@ Resources:
     Type: AWS::CloudFormation::Stack
     DependsOn: [CodeBuildStack, CodeDeployStack]
     Properties:
-      TemplateURL: https://raw.githubusercontent.com/elngovind/cicd-demo/main/WebApp/cfn/codepipeline.yaml
+      TemplateURL: !Sub ${S3TemplateURL}/codepipeline.yaml
       Parameters:
         PipelineName: !Sub ${ProjectName}-pipeline
         RepositoryName: !Ref RepositoryName
         RepositoryOwner: !Ref RepositoryOwner
         BranchName: !Ref BranchName
+        CodeStarConnectionArn: !Ref CodeStarConnectionArn
         ArtifactBucketName: !GetAtt S3BucketStack.Outputs.ArtifactBucketName
         CodePipelineServiceRoleArn: !GetAtt IAMRolesStack.Outputs.CodePipelineServiceRoleArn
         CodeBuildProjectName: !GetAtt CodeBuildStack.Outputs.CodeBuildProjectName
