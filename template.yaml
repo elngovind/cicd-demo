@@ -1,0 +1,110 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Image resizing solution using S3 and Lambda
+
+Resources:
+  # Source S3 bucket where original images are uploaded
+  SourceBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-source-images"
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, PUT, POST, DELETE, HEAD]
+            AllowedOrigins: ['*']
+            MaxAge: 3000
+      NotificationConfiguration:
+        LambdaConfigurations:
+          - Event: s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: suffix
+                    Value: .jpg
+                  - Name: suffix
+                    Value: .jpeg
+                  - Name: suffix
+                    Value: .png
+            Function: !GetAtt ImageResizeFunction.Arn
+
+  # Destination S3 bucket where resized images are stored
+  ResizedBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-resized-images"
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders: ['*']
+            AllowedMethods: [GET, PUT, POST, DELETE, HEAD]
+            AllowedOrigins: ['*']
+            MaxAge: 3000
+
+  # Website bucket to host the UI
+  WebsiteBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${AWS::StackName}-website"
+      AccessControl: PublicRead
+      WebsiteConfiguration:
+        IndexDocument: index.html
+        ErrorDocument: error.html
+
+  # Bucket policy to allow public access to the website
+  WebsiteBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref WebsiteBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Sub "arn:aws:s3:::${WebsiteBucket}/*"
+            Principal: "*"
+
+  # Lambda permission to allow S3 to invoke the function
+  ImageResizeFunctionPermission:
+    Type: AWS::Lambda::Permission
+    Properties:
+      Action: lambda:InvokeFunction
+      FunctionName: !Ref ImageResizeFunction
+      Principal: s3.amazonaws.com
+      SourceAccount: !Ref AWS::AccountId
+      SourceArn: !GetAtt SourceBucket.Arn
+
+  # Lambda function that resizes images
+  ImageResizeFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: ./lambda/
+      Handler: lambda_function.handler
+      Runtime: python3.9
+      Timeout: 30
+      MemorySize: 1024
+      Policies:
+        - S3ReadPolicy:
+            BucketName: !Ref SourceBucket
+        - S3CrudPolicy:
+            BucketName: !Ref ResizedBucket
+      Environment:
+        Variables:
+          DESTINATION_BUCKET: !Ref ResizedBucket
+          RESIZE_WIDTH: 800
+          RESIZE_HEIGHT: 600
+
+Outputs:
+  SourceBucketName:
+    Description: Name of the source S3 bucket
+    Value: !Ref SourceBucket
+  
+  ResizedBucketName:
+    Description: Name of the destination S3 bucket for resized images
+    Value: !Ref ResizedBucket
+  
+  ImageResizeFunction:
+    Description: Lambda function that resizes images
+    Value: !Ref ImageResizeFunction
+    
+  WebsiteURL:
+    Description: URL for the website
+    Value: !Sub "http://${WebsiteBucket}.s3-website-${AWS::Region}.amazonaws.com"
