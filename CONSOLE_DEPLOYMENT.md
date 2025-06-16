@@ -106,32 +106,82 @@
 2. Upload all files from `website/` to website bucket
 
 ## Step 5: Set Up Authentication
-1. Go to AWS Console → Cognito
-2. Create identity pool:
-   - Enable access to unauthenticated identities
-   - Create new IAM roles
-3. Update IAM role for unauthenticated users:
-   - Add inline policy:
-     ```json
-     {
-       "Version": "2012-10-17",
-       "Statement": [
-         {
-           "Effect": "Allow",
-           "Action": [
-             "s3:PutObject",
-             "s3:GetObject"
-           ],
-           "Resource": [
-             "arn:aws:s3:::YOUR-SOURCE-BUCKET-NAME/*",
-             "arn:aws:s3:::YOUR-RESIZED-BUCKET-NAME/*"
-           ]
-         }
-       ]
-     }
-     ```
-4. Update `script.js` with your Identity Pool ID
-5. Re-upload `script.js` to website bucket
+
+### Understanding Amazon Cognito for Authentication
+Amazon Cognito provides authentication, authorization, and user management for web and mobile apps. For our image resizing application, we'll use Cognito Identity Pools to allow users to upload images to S3 without requiring them to sign in (unauthenticated access).
+
+### Create a Cognito Identity Pool
+1. Open AWS Console → Cognito
+2. Click "Identity Pools" in the left navigation (or "Federated Identities" in some regions)
+3. Click "Create new identity pool"
+4. Configure the identity pool:
+   - Identity pool name: `ImageResizerIdentityPool`
+   - Expand "Unauthenticated identities"
+   - Check "Enable access to unauthenticated identities"
+   - Click "Create Pool"
+5. Configure IAM roles:
+   - For the "Unauthenticated role", you can use the default name or customize it
+   - Click "Allow" to create the roles
+
+### Configure IAM Permissions
+1. Open AWS Console → IAM
+2. Click "Roles" in the left navigation
+3. Find and click on the unauthenticated role created in the previous step (it will have "unauth" in the name)
+4. Click "Add permissions" → "Create inline policy"
+5. Switch to the JSON editor and paste the following policy (replace with your actual bucket names):
+   ```json
+   {
+     "Version": "2012-10-17",
+     "Statement": [
+       {
+         "Effect": "Allow",
+         "Action": [
+           "s3:PutObject",
+           "s3:GetObject"
+         ],
+         "Resource": [
+           "arn:aws:s3:::YOUR-SOURCE-BUCKET-NAME/*",
+           "arn:aws:s3:::YOUR-RESIZED-BUCKET-NAME/*"
+         ]
+       }
+     ]
+   }
+   ```
+6. Click "Review policy"
+7. Name the policy `S3ImageResizerAccess`
+8. Click "Create policy"
+
+### Update the Website Code
+1. Open the `website/script.js` file in a text editor
+2. Find the AWS configuration section (around line 15-20)
+3. Update the following values:
+   - `region`: Your AWS region (e.g., 'us-east-1')
+   - `sourceBucketName`: Your source bucket name
+   - `resizedBucketName`: Your resized bucket name
+   - `IdentityPoolId`: Your Cognito Identity Pool ID (found in the Cognito console)
+
+   Example:
+   ```javascript
+   // AWS Configuration
+   const region = 'us-east-1';
+   const sourceBucketName = 'image-resize-source';
+   const resizedBucketName = 'image-resize-destination';
+   
+   // Initialize AWS SDK
+   AWS.config.region = region;
+   AWS.config.credentials = new AWS.CognitoIdentityCredentials({
+       IdentityPoolId: 'us-east-1:a1b2c3d4-5678-90ab-cdef-EXAMPLE11111',
+   });
+   ```
+4. Save the file and upload it to your website bucket
+
+### Testing Authentication
+1. Open your website URL in a browser
+2. Open browser developer tools (F12 or right-click → Inspect)
+3. Go to the Network tab
+4. Try to upload an image
+5. Look for requests to Cognito and S3 services
+6. If you see 403 errors, check your IAM permissions and Cognito setup
 
 ## Step 6: Test the Solution
 1. Access website URL: `http://image-resize-website.s3-website-[REGION].amazonaws.com`
