@@ -7,11 +7,19 @@
    - Resized bucket: `image-resize-destination`
    - Website bucket: `image-resize-website`
 3. For website bucket:
-   - Enable static website hosting
-   - Set index document to `index.html`
-   - Set error document to `error.html`
+   - Enable static website hosting:
+     1. Go to the bucket → Properties → Static website hosting
+     2. Select "Enable"
+     3. Set index document to `index.html`
+     4. Set error document to `error.html`
+   - Disable Block Public Access:
+     1. Go to the bucket → Permissions
+     2. Find "Block public access (bucket settings)"
+     3. Click "Edit"
+     4. Uncheck "Block all public access"
+     5. Save changes (confirm by typing "confirm")
    - Add bucket policy for public read access:
-     1. Go to the website bucket → Permissions → Bucket policy
+     1. Go to the bucket → Permissions → Bucket policy
      2. Add this policy (replace `YOUR-WEBSITE-BUCKET-NAME`):
      ```json
      {
@@ -50,8 +58,12 @@
    - Runtime: Python 3.9
    - Create new role with basic Lambda permissions
 3. Upload code:
-   - Zip `lambda_function.py` and dependencies
-   - Or copy-paste code from `lambda_function.py`
+   - Option 1: Upload the pre-packaged ZIP file from the `deployment` folder
+   - Option 2: Create a ZIP file with `lambda_function.py` and install dependencies:
+     ```
+     pip install pillow boto3 -t .
+     zip -r lambda_function.zip .
+     ```
 4. Add environment variables:
    - `DESTINATION_BUCKET`: Your resized bucket name
    - `RESIZE_WIDTH`: 800
