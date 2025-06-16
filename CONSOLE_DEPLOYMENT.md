@@ -10,7 +10,38 @@
    - Enable static website hosting
    - Set index document to `index.html`
    - Set error document to `error.html`
-   - Add bucket policy for public read access
+   - Add bucket policy for public read access:
+     1. Go to the website bucket → Permissions → Bucket policy
+     2. Add this policy (replace `YOUR-WEBSITE-BUCKET-NAME`):
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Sid": "PublicReadGetObject",
+           "Effect": "Allow",
+           "Principal": "*",
+           "Action": "s3:GetObject",
+           "Resource": "arn:aws:s3:::YOUR-WEBSITE-BUCKET-NAME/*"
+         }
+       ]
+     }
+     ```
+4. For source and resized buckets:
+   - Add CORS configuration:
+     1. Go to each bucket → Permissions → CORS
+     2. Add this configuration:
+     ```json
+     [
+       {
+         "AllowedHeaders": ["*"],
+         "AllowedMethods": ["GET", "PUT", "POST", "DELETE", "HEAD"],
+         "AllowedOrigins": ["*"],
+         "ExposeHeaders": [],
+         "MaxAgeSeconds": 3000
+       }
+     ]
+     ```
 
 ## Step 2: Create Lambda Function
 1. Open AWS Console → Lambda
@@ -26,8 +57,26 @@
    - `RESIZE_WIDTH`: 800
    - `RESIZE_HEIGHT`: 600
 5. Add permissions:
-   - Add S3 read permission for source bucket
-   - Add S3 write permission for destination bucket
+   - Go to Configuration → Permissions → Execution role
+   - Click on the role name to go to IAM
+   - Add inline policy:
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Action": ["s3:GetObject"],
+           "Resource": "arn:aws:s3:::YOUR-SOURCE-BUCKET-NAME/*"
+         },
+         {
+           "Effect": "Allow",
+           "Action": ["s3:PutObject"],
+           "Resource": "arn:aws:s3:::YOUR-RESIZED-BUCKET-NAME/*"
+         }
+       ]
+     }
+     ```
 
 ## Step 3: Configure S3 Event Trigger
 1. Go to source bucket → Properties
@@ -50,7 +99,25 @@
    - Enable access to unauthenticated identities
    - Create new IAM roles
 3. Update IAM role for unauthenticated users:
-   - Add S3 permissions for source and resized buckets
+   - Add inline policy:
+     ```json
+     {
+       "Version": "2012-10-17",
+       "Statement": [
+         {
+           "Effect": "Allow",
+           "Action": [
+             "s3:PutObject",
+             "s3:GetObject"
+           ],
+           "Resource": [
+             "arn:aws:s3:::YOUR-SOURCE-BUCKET-NAME/*",
+             "arn:aws:s3:::YOUR-RESIZED-BUCKET-NAME/*"
+           ]
+         }
+       ]
+     }
+     ```
 4. Update `script.js` with your Identity Pool ID
 5. Re-upload `script.js` to website bucket
 
